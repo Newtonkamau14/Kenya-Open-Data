@@ -7,11 +7,8 @@ import swaggerUI from "swagger-ui-express";
 import path from "path";
 import cors from "cors";
 import { normalizePort } from "./util/util";
-import * as fs from "fs";
-import { CountyRepository } from "./repository/county.repository";
-import { ICounty } from "./models/county";
 import { connection } from "./config/database";
-import countyRouter from "./routes/county.router";
+import router from "./routes/index";
 const PORT = normalizePort(process.env.PORT || "3000");
 const app: Application = express();
 
@@ -29,9 +26,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(router)
 
-//Routes
-app.use("/",countyRouter)
 
 
 //Start server
