@@ -34,3 +34,11 @@ CREATE TABLE constituencies (
     registeredVoters INT,
     FOREIGN KEY (countyId) REFERENCES counties(id)
 );
+
+CREATE TABLE users (
+    id VARCHAR(36) PRIMARY KEY,
+    username VARCHAR(15),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phonenumber VARCHAR(20)
+);
