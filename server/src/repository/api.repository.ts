@@ -3,7 +3,7 @@ import { connection } from "../config/database";
 import { v4 as uuidv4 } from "uuid";
 import { ICounty, IConstituency } from "../models/county";
 
-export class CountyRepository {
+export class ApiRepository {
   async addAllCountyData(counties: ICounty[]): Promise<void> {
     try {
       for (const county of counties) {
@@ -181,7 +181,7 @@ export class CountyRepository {
   }
 
   getCountiesPopulation(): Promise<ICounty[]> {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       connection.query<ICounty[]>(
         `SELECT
             countyCode,
@@ -190,20 +190,19 @@ export class CountyRepository {
          FROM
             counties   
         `,
-        (err,results) => {
-          if(err){
-            reject(err)
-          }
-          else {
-            resolve(results)
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
           }
         }
-      )
-    })
+      );
+    });
   }
 
   getCountiesPopulationDensity(): Promise<ICounty[]> {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       connection.query<ICounty[]>(
         `SELECT
             countyCode,
@@ -211,20 +210,20 @@ export class CountyRepository {
             populationDensity
          FROM
             counties   
-        `,(err,results) => {
-          if(err) {
-            reject(err)
-          }
-          else {
-            resolve(results)
+        `,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
           }
         }
-      )
-    })
+      );
+    });
   }
 
   getCountiesHousehold(): Promise<ICounty[]> {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       connection.query<ICounty[]>(
         `SELECT
             countyCode,
@@ -233,27 +232,50 @@ export class CountyRepository {
             averageHouseholdSize
          FROM
             counties   
-        `,(err,results) => {
-          if(err){
-            reject(err)
-          }
-          else {
-            resolve(results)
+        `,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
           }
         }
-      )
-    })
+      );
+    });
   }
-
 
   getCountiesRegisteredVoters(): Promise<ICounty[]> {
-    return new Promise((resolve,reject) => {
-      connection.query
-    })
+    return new Promise((resolve, reject) => {
+      connection.query<ICounty[]>(
+        `
+        SELECT
+          counties.countyCode,
+          counties.countyName,
+          counties.capital,
+          SUM(constituencies.registeredVoters) AS total_registered_voters
+        FROM
+          counties
+        INNER JOIN constituencies ON 
+          counties.id = constituencies.countyId  
+        GROUP BY   
+          counties.countyCode,
+          counties.countyName,
+          counties.capital
+        `,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        }
+      );
+    });
   }
 
+
   getCountiesCapital(): Promise<ICounty[]> {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       connection.query<ICounty[]>(
         `SELECT
             countyCode,
@@ -261,16 +283,16 @@ export class CountyRepository {
             capital
          FROM
             counties   
-        `,(err,results) => {
-          if(err) {
-            reject(err)
-          }
-          else {
-            resolve(results)
+        `,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
           }
         }
-      )
-    })
+      );
+    });
   }
 
   getConstituenciesByCounty(): Promise<IConstituency[]> {
@@ -297,8 +319,8 @@ export class CountyRepository {
     });
   }
 
-  getConstituencies(): Promise<IConstituency[]>{
-    return new Promise((resolve,reject) => {
+  getConstituencies(): Promise<IConstituency[]> {
+    return new Promise((resolve, reject) => {
       connection.query<IConstituency[]>(
         `SELECT
             constituencyCode,
@@ -307,21 +329,22 @@ export class CountyRepository {
          FROM
             constituencies
          ORDER BY constituencyCode ASC  
-        `,(err,results) => {
-          if(err) {
-            reject(err)
+        `,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
           }
-          else {
-            resolve(results)
-          }
-        } 
-      )
-    })
+        }
+      );
+    });
   }
 
-
-  getConstituencyByConstituencyCode(constituencyCode: string): Promise<IConstituency | undefined> {
-    return new Promise((resolve,reject) => {
+  getConstituencyByConstituencyCode(
+    constituencyCode: string
+  ): Promise<IConstituency | undefined> {
+    return new Promise((resolve, reject) => {
       connection.query<IConstituency[]>(
         `SELECT
             constituencyCode,
@@ -332,15 +355,14 @@ export class CountyRepository {
          WHERE constituencyCode = ? 
         `,
         [constituencyCode],
-        (err,results) => {
-          if(err) {
-            reject(err)
-          }
-          else {
-            resolve(results?.[0])
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results?.[0]);
           }
         }
-      )
-    })
+      );
+    });
   }
 }

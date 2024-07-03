@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
 import * as path from "path";
-import { CountyRepository } from "../repository/county.repository";
+import { ApiRepository } from "../repository/api.repository";
 import { ICounty } from "../models/county";
 import { logger } from "../util/util";
 
-export class CountyController {
-  private static countyRepository = new CountyRepository();
+export class ApiController {
+  private static apiRepository = new ApiRepository();
 
   static async addAll(req: Request, res: Response): Promise<void> {
     try {
@@ -15,10 +15,10 @@ export class CountyController {
         __dirname,
         "../../modified_combined_county_data.json"
       );
-      const counties = (await CountyController.readJSONFile(
+      const counties = (await ApiController.readJSONFile(
         filePath
       )) as ICounty[];
-      await CountyController.countyRepository.addAllCountyData(counties);
+      await ApiController.apiRepository.addAllCountyData(counties);
       res.status(200).json({ message: "Data successfully inserted" });
     } catch (error) {
       logger.error("Failed to insert data", error);
@@ -87,7 +87,7 @@ export class CountyController {
 
   static async getAllCounties(req: Request, res: Response): Promise<void> {
     try {
-      const counties = await CountyController.countyRepository.getAllCounties();
+      const counties = await ApiController.apiRepository.getAllCounties();
       if (counties.length === 0) {
         res.status(204).json({ message: "No counties found" });
       } else {
@@ -106,7 +106,7 @@ export class CountyController {
     const { countyCode } = req.params;
     try {
       const county =
-        await CountyController.countyRepository.getCountyByCountyCode(
+        await ApiController.apiRepository.getCountyByCountyCode(
           countyCode
         );
 
@@ -131,7 +131,7 @@ export class CountyController {
       }
 
       const counties =
-        await CountyController.countyRepository.getCountiesBySize(
+        await ApiController.apiRepository.getCountiesBySize(
           order as "ASC" | "DESC"
         );
 
@@ -152,7 +152,7 @@ export class CountyController {
   ): Promise<void> {
     try {
       const counties =
-        await CountyController.countyRepository.getCountiesPopulation();
+        await ApiController.apiRepository.getCountiesPopulation();
 
       if (!counties) {
         res.status(404).json({ message: "Counties population not found" });
@@ -174,7 +174,7 @@ export class CountyController {
   ): Promise<void> {
     try {
       const counties =
-        await CountyController.countyRepository.getCountiesPopulationDensity();
+        await ApiController.apiRepository.getCountiesPopulationDensity();
 
       if (!counties) {
         res
@@ -198,7 +198,7 @@ export class CountyController {
   ): Promise<void> {
     try {
       const counties =
-        await CountyController.countyRepository.getCountiesHousehold();
+        await ApiController.apiRepository.getCountiesHousehold();
 
       if (!counties) {
         res
@@ -216,10 +216,28 @@ export class CountyController {
     }
   }
 
+  static async getCountiesRegisteredVoters(req:Request,res:Response): Promise<void> {
+    try {
+      const counties = await ApiController.apiRepository.getCountiesRegisteredVoters();
+
+      if (!counties) {
+        res.status(404).json({ message: "Counties registered voters not found" });
+      }
+      if (counties.length === 0) {
+        res.status(204).json({ message: "No counties registered voters" });
+      } else {
+        res.status(200).json(counties);
+      }
+    } catch (error) {
+      logger.error("Error in getting counties registered voters", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
   static async getCountiesCapital(req: Request, res: Response): Promise<void> {
     try {
       const counties =
-        await CountyController.countyRepository.getCountiesCapital();
+        await ApiController.apiRepository.getCountiesCapital();
 
       if (!counties) {
         res.status(404).json({ message: "Counties capital not found" });
@@ -241,7 +259,7 @@ export class CountyController {
   ): Promise<void> {
     try {
       const constituencies =
-        await CountyController.countyRepository.getConstituenciesByCounty();
+        await ApiController.apiRepository.getConstituenciesByCounty();
 
       if (!constituencies) {
         res.status(404).json({ message: "No constituencies" });
@@ -260,7 +278,7 @@ export class CountyController {
   static async getConstituencies(req: Request, res: Response): Promise<void> {
     try {
       const constituencies =
-        await CountyController.countyRepository.getConstituencies();
+        await ApiController.apiRepository.getConstituencies();
 
       if (!constituencies) {
         res.status(404).json({ message: "No constituencies" });
@@ -284,7 +302,7 @@ export class CountyController {
       const { constituencyCode } = req.params;
 
       const constituency =
-        await CountyController.countyRepository.getConstituencyByConstituencyCode(
+        await ApiController.apiRepository.getConstituencyByConstituencyCode(
           constituencyCode
         );
 
