@@ -1,4 +1,5 @@
 import { createLogger, transports, format, info } from "winston";
+import { customAlphabet } from "nanoid";
 
 /* Logs requests and db queries and it outputs to file called app.log */
 const customFormat = format.combine(
@@ -35,4 +36,10 @@ function normalizePort(val: string | number): number | string | false {
   return false;
 }
 
-export { logger, normalizePort };
+
+const nanoid = customAlphabet(
+  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+  10
+);
+
+export { logger, normalizePort,nanoid };

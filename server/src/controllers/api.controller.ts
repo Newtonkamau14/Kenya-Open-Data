@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
 import * as path from "path";
 import { ApiRepository } from "../repository/api.repository";
 import { ICounty } from "../models/county";
-import { logger } from "../util/util";
+import { logger,nanoid } from "../util/util";
+
+
 
 export class ApiController {
   private static apiRepository = new ApiRepository();
@@ -41,7 +42,7 @@ export class ApiController {
       const counties: ICounty[] = parsedData.map(
         (county: any) =>
           ({
-            id: uuidv4(),
+            id: nanoid(),
             countyCode: county["County Code"],
             countyName: county["County Name"],
             size: parseFloat(county["Size(km2)"]),
@@ -105,10 +106,9 @@ export class ApiController {
   ): Promise<void> {
     const { countyCode } = req.params;
     try {
-      const county =
-        await ApiController.apiRepository.getCountyByCountyCode(
-          countyCode
-        );
+      const county = await ApiController.apiRepository.getCountyByCountyCode(
+        countyCode
+      );
 
       if (!county) {
         res.status(404).json({ message: "No county found" });
@@ -130,10 +130,9 @@ export class ApiController {
         res.status(400).json({ message: "Not a valid size order" });
       }
 
-      const counties =
-        await ApiController.apiRepository.getCountiesBySize(
-          order as "ASC" | "DESC"
-        );
+      const counties = await ApiController.apiRepository.getCountiesBySize(
+        order as "ASC" | "DESC"
+      );
 
       if (!counties || counties.length === 0) {
         res.status(204).json({ message: "No counties found" });
@@ -197,8 +196,7 @@ export class ApiController {
     res: Response
   ): Promise<void> {
     try {
-      const counties =
-        await ApiController.apiRepository.getCountiesHousehold();
+      const counties = await ApiController.apiRepository.getCountiesHousehold();
 
       if (!counties) {
         res
@@ -216,12 +214,18 @@ export class ApiController {
     }
   }
 
-  static async getCountiesRegisteredVoters(req:Request,res:Response): Promise<void> {
+  static async getCountiesRegisteredVoters(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     try {
-      const counties = await ApiController.apiRepository.getCountiesRegisteredVoters();
+      const counties =
+        await ApiController.apiRepository.getCountiesRegisteredVoters();
 
       if (!counties) {
-        res.status(404).json({ message: "Counties registered voters not found" });
+        res
+          .status(404)
+          .json({ message: "Counties registered voters not found" });
       }
       if (counties.length === 0) {
         res.status(204).json({ message: "No counties registered voters" });
@@ -236,8 +240,7 @@ export class ApiController {
 
   static async getCountiesCapital(req: Request, res: Response): Promise<void> {
     try {
-      const counties =
-        await ApiController.apiRepository.getCountiesCapital();
+      const counties = await ApiController.apiRepository.getCountiesCapital();
 
       if (!counties) {
         res.status(404).json({ message: "Counties capital not found" });

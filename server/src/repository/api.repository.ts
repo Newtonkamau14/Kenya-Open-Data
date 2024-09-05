@@ -1,13 +1,13 @@
 import { ResultSetHeader } from "mysql2";
 import { connection } from "../config/database";
-import { v4 as uuidv4 } from "uuid";
 import { ICounty, IConstituency } from "../models/county";
+import { nanoid } from "../util/util";
 
 export class ApiRepository {
   async addAllCountyData(counties: ICounty[]): Promise<void> {
     try {
       for (const county of counties) {
-        const countyId = uuidv4();
+        const countyId = nanoid();
         console.log("Inserting county:", JSON.stringify(county, null, 2)); // Log county data for debugging
 
         // Insert county data
@@ -52,7 +52,7 @@ export class ApiRepository {
               `INSERT INTO constituencies (id, countyId, constituencyCode, constituencyName, registeredVoters) 
               VALUES (?, ?, ?, ?, ?)`,
               [
-                uuidv4(),
+                nanoid(),
                 countyId,
                 constituency.constituencyCode,
                 constituency.constituencyName,
