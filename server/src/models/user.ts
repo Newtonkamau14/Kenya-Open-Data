@@ -6,4 +6,6 @@ export interface IUser extends RowDataPacket {
   email: string;
   password: string;
   phonenumber?: string;
+  salt: string
+  apiKey?: string
 }
