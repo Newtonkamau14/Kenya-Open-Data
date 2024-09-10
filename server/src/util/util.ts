@@ -42,4 +42,10 @@ const nanoid = customAlphabet(
   10
 );
 
-export { logger, normalizePort,nanoid };
+const generateAPIKey = () => {
+  return[...Array(30)]
+  .map((e) => ((Math.random() * 32) | 0).toString(32))
+  .join('');
+}
+
+export { logger, normalizePort,nanoid,generateAPIKey };
