@@ -3,9 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { ApiRepository } from "../repository/api.repository";
 import { ICounty } from "../models/county";
-import { logger,nanoid } from "../util/util";
-
-
+import { logger, nanoid } from "../util/util";
 
 export class ApiController {
   private static apiRepository = new ApiRepository();
@@ -122,8 +120,7 @@ export class ApiController {
   }
 
   static async getCountiesBySize(req: Request, res: Response): Promise<void> {
-    const { order } = req.query;
-    console.log("Received request with size order:", order); // Log the incoming request
+    const order = (req.query.order as "ASC" | "DESC") || "ASC"; // Default to "ASC"
 
     try {
       if (order !== "ASC" && order !== "DESC") {
@@ -131,7 +128,7 @@ export class ApiController {
       }
 
       const counties = await ApiController.apiRepository.getCountiesBySize(
-        order as "ASC" | "DESC"
+        order
       );
 
       if (!counties || counties.length === 0) {

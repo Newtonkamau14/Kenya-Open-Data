@@ -157,7 +157,7 @@ export class ApiRepository {
     });
   }
 
-  getCountiesBySize(order: "ASC" | "DESC"): Promise<ICounty[]> {
+  getCountiesBySize(order: "ASC" | "DESC" = "ASC"): Promise<ICounty[]> {
     return new Promise((resolve, reject) => {
       connection.query<ICounty[]>(
         `SELECT
