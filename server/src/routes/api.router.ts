@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { ApiController } from "../controllers/api.controller";
+import { authenticateKey } from "../middleware/middleware";
 const router = Router();
+
+router.use(authenticateKey)
 
 router.route("/add-all-county-data").post(ApiController.addAll);
 router.route("/counties").get(ApiController.getAllCounties);
