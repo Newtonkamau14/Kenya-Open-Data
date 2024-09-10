@@ -8,6 +8,7 @@ import path from "path";
 import cors from "cors";
 import * as session from "express-session";
 import MySQLStore, { Options } from "express-mysql-session";
+import { MemoryStore, rateLimit } from "express-rate-limit";
 import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
 import router from "./routes/index";
@@ -16,6 +17,17 @@ import router from "./routes/index";
 const PORT = normalizePort(process.env.PORT || "3000");
 const app: Application = express();
 const MySQLStoreInstance = MySQLStore(session);
+
+//limiter
+const limiter = rateLimit({
+  windowMs: 60000,
+  store: new MemoryStore(),
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res, next, options) =>
+		res.status(options.statusCode).send(options.message),
+})
 
 const options: Options = {
   host: process.env.DATABASE_HOST,
@@ -67,8 +79,7 @@ app.use(session.default({
     sameSite: 'none'
   }
 }))
-
-
+app.use(limiter)
 app.use(router);
 
 
