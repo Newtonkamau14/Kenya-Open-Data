@@ -4,44 +4,37 @@ sidebar_position: 1
 
 # Introduction
 
-Let's discover **Docusaurus in less than 5 minutes**.
-
 ## Getting Started
 
-Get started by **creating a new site**.
+Get started by creating an account to get and receive the API key.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+## Authentication
 
-### What you'll need
+The API requires an API key for authentication. You can pass the API key either through the request headers or as a query parameter.
 
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+### Header Authentication
 
-## Generate a new site
+Place the API key in the `x-api-key` header:
 
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
 
 ```bash
-npm init docusaurus@latest my-website classic
+    curl -X GET http://localhost:3000/counties \
+         -H "x-api-key: your api key"
 ```
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+Alternatively, you can pass the API key as a query parameter:
 
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
 
 ```bash
-cd my-website
-npm run start
+    curl -X GET http://localhost:3000/counties?API_KEY=your api key 
 ```
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+When there is other query parameters the `API_KEY` paramter should come first.
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+## Rate Limiting
+
+The API enforces rate limiting to prevent abuse. The default rate limit is 10 requests per minute. If you exceed this limit, you will receive a `429 Too Many Requests` response.
+
+
+
