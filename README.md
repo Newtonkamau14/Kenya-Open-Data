@@ -12,5 +12,5 @@ It is an API that gives detailed information about each county, including popula
 
 ## Documentation
 
-[Documentation](https://linktodocumentation)
+[Documentation](https://newtonkamau14.github.io/Kenya-Open-Data/)
 
