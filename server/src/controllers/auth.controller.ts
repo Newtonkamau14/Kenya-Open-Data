@@ -1,12 +1,16 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IUser } from "../models/user";
 import { AuthRepository } from "../repository/auth.repository";
-import { logger } from "../util/util";
+import { AppError, logger } from "../util/util";
 
 export class AuthController {
   private static authRepository = new AuthRepository();
 
-  static async signUp(req: Request, res: Response): Promise<void> {
+  static async signUp(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     const user: IUser = req.body;
     const { email, password } = req.body;
     try {
@@ -38,12 +42,15 @@ export class AuthController {
         res.status(201).json({ message: "Account created successfully" });
       }
     } catch (error) {
-      logger.error("Error in signing up user", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in signing up user", 500));
     }
   }
 
-  static async login(req: Request, res: Response): Promise<void> {
+  static async login(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     const { email, password } = req.body;
 
     try {
@@ -87,16 +94,19 @@ export class AuthController {
       req.session.userId = user.id;
       res.status(200).json({ message: "Logged in successfully" });
     } catch (error) {
-      logger.error("Error logging in user", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error logging in user", 500));
     }
   }
-  
-  static async logout(req: Request, res: Response): Promise<void> {
+
+  static async logout(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       req.session.destroy((err) => {
         if (err) {
-          logger.error("Error destroying session", err);
+          // logger.error("Error destroying session", err);
           res.status(500).json({ message: "Error logging out" });
           return;
         }
@@ -105,14 +115,13 @@ export class AuthController {
         res.clearCookie("connect.sid", {
           httpOnly: true,
           sameSite: "none",
-          secure: process.env.NODE_ENV === 'production', 
+          secure: process.env.NODE_ENV === "production",
         });
 
         res.status(200).json({ message: "You're signed out" });
       });
     } catch (error) {
-      logger.error("Error logging out user", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error logging out user", 500));
     }
   }
 }

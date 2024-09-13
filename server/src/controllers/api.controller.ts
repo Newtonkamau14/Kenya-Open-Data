@@ -1,14 +1,18 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
 import { ApiRepository } from "../repository/api.repository";
 import { ICounty } from "../models/county";
-import { logger, nanoid } from "../util/util";
+import { AppError, logger, nanoid } from "../util/util";
 
 export class ApiController {
   private static apiRepository = new ApiRepository();
-  
-  static async getAllCounties(req: Request, res: Response): Promise<void> {
+
+  static async getAllCounties(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const counties = await ApiController.apiRepository.getAllCounties();
       if (counties.length === 0) {
@@ -17,16 +21,21 @@ export class ApiController {
         res.status(200).json(counties);
       }
     } catch (error) {
-      logger.error("Error in getting counties", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties", 500));
     }
   }
 
   static async getCountyByCountyCode(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     const { countyCode } = req.params;
+
+    if (!countyCode || typeof countyCode !== "string") {
+      res.status(400).json({ message: "Invalid county code" });
+      return;
+    }
     try {
       const county = await ApiController.apiRepository.getCountyByCountyCode(
         countyCode
@@ -38,12 +47,15 @@ export class ApiController {
         res.status(200).json(county);
       }
     } catch (error) {
-      logger.error("Error in getting county", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting county", 500));
     }
   }
 
-  static async getCountiesBySize(req: Request, res: Response): Promise<void> {
+  static async getCountiesBySize(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     const order = (req.query.order as "ASC" | "DESC") || "ASC"; // Default to "ASC"
 
     try {
@@ -61,14 +73,14 @@ export class ApiController {
 
       res.status(200).json(counties);
     } catch (error) {
-      logger.error("Error in getting counties by size", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties by size", 500));
     }
   }
 
   static async getCountiesPopulation(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const counties =
@@ -83,14 +95,14 @@ export class ApiController {
         res.status(200).json(counties);
       }
     } catch (error) {
-      logger.error("Error in getting counties population", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties poulation", 500));
     }
   }
 
   static async getCountiesPopulationDensity(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const counties =
@@ -107,14 +119,14 @@ export class ApiController {
         res.status(200).json(counties);
       }
     } catch (error) {
-      logger.error("Error in getting counties population density", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties population density", 500));
     }
   }
 
   static async getCountiesHousehold(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const counties = await ApiController.apiRepository.getCountiesHousehold();
@@ -130,14 +142,14 @@ export class ApiController {
         res.status(200).json(counties);
       }
     } catch (error) {
-      logger.error("Error in getting counties household", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties household", 500));
     }
   }
 
   static async getCountiesRegisteredVoters(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const counties =
@@ -154,12 +166,15 @@ export class ApiController {
         res.status(200).json(counties);
       }
     } catch (error) {
-      logger.error("Error in getting counties registered voters", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties registered voters", 500));
     }
   }
 
-  static async getCountiesCapital(req: Request, res: Response): Promise<void> {
+  static async getCountiesCapital(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const counties = await ApiController.apiRepository.getCountiesCapital();
 
@@ -172,14 +187,14 @@ export class ApiController {
         res.status(200).json(counties);
       }
     } catch (error) {
-      logger.error("Error in getting counties capital", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties capital", 500));
     }
   }
 
   static async getConstituenciesByCounty(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const constituencies =
@@ -194,12 +209,15 @@ export class ApiController {
         res.status(200).json(constituencies);
       }
     } catch (error) {
-      logger.error("Error in getting counties by size", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting counties size", 500));
     }
   }
 
-  static async getConstituencies(req: Request, res: Response): Promise<void> {
+  static async getConstituencies(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const constituencies =
         await ApiController.apiRepository.getConstituencies();
@@ -213,14 +231,14 @@ export class ApiController {
         res.status(200).json(constituencies);
       }
     } catch (error) {
-      logger.error("Error in getting constituencies", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting constituencies", 500));
     }
   }
 
   static async getConstituencyByConstituencyCode(
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { constituencyCode } = req.params;
@@ -236,8 +254,7 @@ export class ApiController {
         res.status(200).json(constituency);
       }
     } catch (error) {
-      logger.error("Error in getting constituency by code", error);
-      res.status(500).json({ message: "Internal server error" });
+      next(new AppError("Error in getting constituency by code", 500));
     }
   }
 }
