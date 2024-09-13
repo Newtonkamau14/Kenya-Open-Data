@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import { AuthRepository } from "../repository/auth.repository";
 import { connection } from "../config/database";
 import { IUser } from "../models/user";
@@ -40,4 +40,22 @@ const authenticateKey = async (req: Request, res: Response, next: NextFunction) 
   next();
 };
 
-export { requireAuth,authenticateKey };
+
+const errorHandler: ErrorRequestHandler = (
+  err,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errStatus = err.statusCode || 500;
+  const errMsg = err.message || "Something went wrong";
+
+  return res.status(errStatus).json({
+    success: false,
+    status: errStatus,
+    message: errMsg,
+    stack: process.env.NODE_ENV === "development" ? err.stack : {},
+  });
+};
+
+export { requireAuth,authenticateKey,errorHandler };

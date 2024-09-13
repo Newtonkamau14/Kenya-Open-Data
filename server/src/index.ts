@@ -12,6 +12,7 @@ import { MemoryStore, rateLimit } from "express-rate-limit";
 import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
 import router from "./routes/index";
+import { errorHandler } from "./middleware/middleware";
 
 
 const PORT = normalizePort(process.env.PORT || "3000");
@@ -79,6 +80,7 @@ app.use(session.default({
     sameSite: 'none'
   }
 }))
+app.use(errorHandler)
 app.use(limiter)
 app.use(router);
 
