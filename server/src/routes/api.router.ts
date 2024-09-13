@@ -5,7 +5,6 @@ const router = Router();
 
 router.use(authenticateKey)
 
-router.route("/add-all-county-data").post(ApiController.addAll);
 router.route("/counties").get(ApiController.getAllCounties);
 router.route("/counties/size").get(ApiController.getCountiesBySize);
 router
