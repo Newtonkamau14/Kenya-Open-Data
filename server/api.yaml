@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+    title: Kenya Open Data
+    description: It is an API that gives detailed information about each county, including population, size, leadership, and capital city.Also has data of constituencies.
+    version: 1.0.0
+servers:
+  - url: /
+
+
+
+components:
+  schemas:
+    Constituency:
+      type: object
+      properties:
+
+    County:
+      type: object
+      properties:
+        id:
+          type: string
+          description:
+        countyCode: 
+          type: string
+          description:
+        size:
+          type: number 
+          description  
+    Economic Activity:
