@@ -25,5 +25,5 @@ components:
           description:
         size:
           type: number 
-          description  
+          description:  
     Economic Activity:
