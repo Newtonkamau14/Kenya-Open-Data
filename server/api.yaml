@@ -4,26 +4,356 @@ info:
     description: It is an API that gives detailed information about each county, including population, size, leadership, and capital city.Also has data of constituencies.
     version: 1.0.0
 servers:
-  - url: /
+  - url: https://kenya-open-data.onrender.com/
 
 
 
 components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
   schemas:
     Constituency:
       type: object
       properties:
+        id:
+          type: string
+          description: Unique identifier for the constituency.
+        countyId: 
+          type: string
+          description: Unique identifier for the county to which the constituency belongs.
+        constituencyCode:
+          type: string
+          description: Official code assigned to the constituency.
+        constituencyName:
+          type: string 
+          description: Official name of the constituency.
+        registeredVoters:
+          type: number
+          description: Total number of registered voters within the constituency.
+      example:
+        id: eLLk102nuR
+        countyId: h51kiVHZ51
+        constituencyCode: 001
+        constituencyName: CHANGAMWE
+        registeredVoters: 93561         
 
     County:
       type: object
       properties:
         id:
           type: string
-          description:
+          description: Unique identifier for the county.
         countyCode: 
           type: string
-          description:
+          description: Official code assigned to the county.
         size:
           type: number 
-          description:  
-    Economic Activity:
+          description: Area of the county, measured in square kilometers. 
+        population:
+          type: number
+          description: Total population of the county.
+        populationDensity:
+          type: number
+          description: Population density of the county, calculated as population divided by area.
+        numberOfHouseholds:
+          type: number
+          description: Total number of households within the county.
+        averageHouseholdSize:
+          type: number
+          description: Average number of people per household in the county.
+        sexRatio:
+          type: number 
+          description: Ratio of males to females in the county's population.
+        capital:
+          type: string
+          description: Name of the county's capital city.
+        governor:
+          type: string
+          description: Name of the county's governor.
+        deputyGovernor:
+          type: string
+          description: Name of the county's deputy governor.
+        womenRepresentative:
+          type: string
+          description: Name of the county's women representative.
+        mainEconomicActivities:
+          type: array
+          description: List of the county's main economic activities.
+          items:
+            $ref: '#/components/schemas/EconomicActivity'
+        constituencies:
+          type: array
+          description: List of constituencies within the county.
+          items:
+            $ref: '#/components/schemas/Constituency' 
+      example: 
+        id: h51kiVHZ51
+        countyCode: 001
+        countyName: Mombasa (County)
+        size: 220
+        population: 1208333
+        populationDensity: 5495
+        numberOfHouseholds: 37842
+        averageHouseholdSize: 2
+        sexRatio: 3
+        capital: Mombasa (City)
+        governor: Abdullswammad  Sherif Nassir
+        deputyGovernor: Francis Thoya
+        womenRepresentative: Zamzam Mohamed
+        mainEconomicActivities:
+        constituencies:
+
+    EconomicActivity:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the economic activity.
+        countyId:
+          type: string
+          description: Unique identifier for the county to which the economic activity belongs.
+        activity:
+          type: string
+          description: Name or description of the economic activity.
+    
+      example:
+        id:
+        countyId:
+        activity:
+
+tags:
+  name: Constituencies
+  description:
+  name: Counties
+  description:
+
+
+paths:
+  /counties:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties found
+          500:
+            description: Error in getting counties
+
+  /counties/size:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties found
+          400:
+            description: Not a valid size order
+          500:
+            description:  Error in getting counties by size    
+  /counties/population:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties population          
+          404:
+            description: Counties population not found
+          500:
+            description: Error in getting counties population              
+  /counties/populationdensity:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties population density
+          404:
+            description: Counties population density not found
+          500:
+            description: Error in getting counties population density              
+  /counties/households:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description: 
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties household
+          404:
+            description: Counties population household not found
+          500:
+            description: Error in getting counties household             
+  /counties/registeredvoters:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties registered voters
+          404:
+            description: Counties registered voters not found
+          500:
+            description: Error in getting counties registered voters           
+  /counties/capital:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No counties capital
+          404:
+            description: Counties capital not found
+          500:
+            description: Error in getting counties capital             
+  /counties/constituencies:
+    get:
+      summary:
+      tags: [Counties]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          204:
+            description: No constituencies 
+          404:
+            description: No constituencies found  
+          500:
+            description: Error in getting county constituencies            
+  /counties/{countyCode}:
+    get:
+      summary:
+      tags: [Counties]
+      parameters:
+        - in: query
+          name: countyCode
+          schema:
+            type: string
+            required: true
+            description: Official code assigned to the county.  
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/County'
+          400:
+            description: Invalid county code
+          404:
+            description: No county found
+          500:
+            description: Error in getting county
+
+
+
+  /constituencies:
+    get:
+      summary:
+      tags: [Constituencies]
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Constituency'
+          204:
+            description: No constituencies
+          404:
+            description: No constituencies found
+          500:
+            description: Error in getting constituencies              
+  /constituencies/{constituencyCode}:   
+    get:
+      summary:
+      tags: [Constituencies]
+      parameters:
+        - in: query
+          name: constituencyCode
+          schema: 
+            type: string
+            required: true
+            description: Official code assigned to the constituency.
+      responses:
+          200:
+            description:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Constituency'
+          204:
+            description: No constituency
+          404:
+            description: No constituency found
+          500:
+            description: Error in getting constituency by code                              
