@@ -7,10 +7,9 @@ servers:
   - url: https://kenya-open-data.onrender.com/
 
 
-
 components:
   securitySchemes:
-    apiKey:
+    apiKeyAuth:
       type: apiKey
       in: header
       name: x-api-key
@@ -34,8 +33,6 @@ components:
           type: number
           description: Total number of registered voters within the constituency.
       example:
-        id: eLLk102nuR
-        countyId: h51kiVHZ51
         constituencyCode: 001
         constituencyName: CHANGAMWE
         registeredVoters: 93561         
@@ -100,11 +97,23 @@ components:
         averageHouseholdSize: 2
         sexRatio: 3
         capital: Mombasa (City)
-        governor: Abdullswammad  Sherif Nassir
+        governor: Abdullswammad Sherif Nassir
         deputyGovernor: Francis Thoya
         womenRepresentative: Zamzam Mohamed
-        mainEconomicActivities:
-        constituencies:
+        mainEconomicActivities: []
+        constituencies: 
+          - constituencyCode: "005"
+            constituencyName: "LIKONI"
+          - constituencyCode: "002"
+            constituencyName: "JOMVU"
+          - constituencyCode: "001"
+            constituencyName: "CHANGAMWE"
+          - constituencyCode: "004"
+            constituencyName: "NYALI"
+          - constituencyCode: "003"
+            constituencyName: "KISAUNI"
+          - constituencyCode: "006"
+            constituencyName: "MVITA"
 
     EconomicActivity:
       type: object
@@ -126,10 +135,12 @@ components:
 
 tags:
   name: Constituencies
-  description:
+  description: Endpoints related to managing and retrieving data about electoral constituencies, including details like constituency codes, names, and registered voters.
   name: Counties
-  description:
+  description: Endpoints related to managing and retrieving data about counties, including details about county size, population, governor, and economic activities.
 
+security:
+  - apiKeyAuth: []
 
 paths:
   /counties:
@@ -154,15 +165,30 @@ paths:
     get:
       summary:
       tags: [Counties]
+      parameters:
+        - in: query
+          name: size
+          schema: 
+            type: string
+            required: true
+            description: The counties will be sorted in ascending or descending order. Use "ASC" for ascending and "DESC" for descending.
       responses:
           200:
             description:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyCode:
+                      type: string
+                      example: 001
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    size:
+                      type: number
+                      example: 220   
           204:
             description: No counties found
           400:
@@ -179,9 +205,17 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyCode: 
+                      type: string
+                      example: 001
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    population:
+                      type: number
+                      example: 1208333  
           204:
             description: No counties population          
           404:
@@ -198,9 +232,17 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyCode: 
+                      type: string
+                      example: 001
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    populationDensity:
+                      type: number
+                      example: 5495 
           204:
             description: No counties population density
           404:
@@ -217,9 +259,20 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyCode: 
+                      type: string
+                      example: 001
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    numberOfHouseholds:
+                      type: number
+                      example: 378422
+                    averageHouseholdSize:
+                      type: number
+                      example: 3   
           204:
             description: No counties household
           404:
@@ -236,9 +289,20 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyCode: 
+                      type: string
+                      example: 001
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    capital:
+                      type: string
+                      example: Mombasa (City) 
+                    total_registered_voters:
+                      type: string
+                      example: 641913   
           204:
             description: No counties registered voters
           404:
@@ -255,9 +319,17 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyCode: 
+                      type: string
+                      example: 001
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    capital:
+                      type: string
+                      example: Mombasa (City)
           204:
             description: No counties capital
           404:
@@ -274,9 +346,29 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  type: object
+                  properties:
+                    countyName:
+                      type: string
+                      example: Mombasa (County)
+                    constituencies: 
+                      type: array
+                      description: List of constituencies within the county.
+                      items:
+                          $ref: '#/components/schemas/Constituency' 
+                      example:    
+                        - constituencyCode: "005"
+                          constituencyName: "LIKONI"
+                        - constituencyCode: "002"
+                          constituencyName: "JOMVU"
+                        - constituencyCode: "001"
+                          constituencyName: "CHANGAMWE"
+                        - constituencyCode: "004"
+                          constituencyName: "NYALI"
+                        - constituencyCode: "003"
+                          constituencyName: "KISAUNI"
+                        - constituencyCode: "006"
+                          constituencyName: "MVITA"
           204:
             description: No constituencies 
           404:
@@ -288,7 +380,7 @@ paths:
       summary:
       tags: [Counties]
       parameters:
-        - in: query
+        - in: path
           name: countyCode
           schema:
             type: string
@@ -300,9 +392,7 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/County'
+                  $ref: '#/components/schemas/County'
           400:
             description: Invalid county code
           404:
@@ -336,7 +426,7 @@ paths:
       summary:
       tags: [Constituencies]
       parameters:
-        - in: query
+        - in: path
           name: constituencyCode
           schema: 
             type: string
@@ -348,9 +438,7 @@ paths:
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Constituency'
+                  $ref: '#/components/schemas/Constituency'
           204:
             description: No constituency
           404:
