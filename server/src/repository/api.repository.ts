@@ -87,8 +87,10 @@ export class ApiRepository {
     });
   }
 
-  getCountiesBySize(order: "ASC" | "DESC" = "ASC"): Promise<ICounty[]> {
+  getCountiesBySize(order: "ASC" | "DESC" | "RANDOM" = "RANDOM"): Promise<ICounty[]> {
     return new Promise((resolve, reject) => {
+      const orderByClause = order === "RANDOM" ? "RAND()" : `size ${order}`;
+      
       connection.query<ICounty[]>(
         `SELECT
             countyCode,
@@ -97,7 +99,7 @@ export class ApiRepository {
          FROM
           counties
          ORDER BY
-            size ${order}
+            ${orderByClause}
         `,
         (err, results) => {
           if (err) {
@@ -109,8 +111,11 @@ export class ApiRepository {
       );
     });
   }
+  
 
-  getCountiesPopulation(): Promise<ICounty[]> {
+  getCountiesPopulation(order: "ASC" | "DESC" | "RANDOM" = "RANDOM"): Promise<ICounty[]> {
+    const orderByClause = order === "RANDOM" ? "RAND()" : `size ${order}`;
+
     return new Promise((resolve, reject) => {
       connection.query<ICounty[]>(
         `SELECT
@@ -119,6 +124,8 @@ export class ApiRepository {
             population
          FROM
             counties   
+         ORDER BY
+            ${orderByClause}   
         `,
         (err, results) => {
           if (err) {
