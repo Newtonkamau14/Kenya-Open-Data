@@ -13,7 +13,7 @@ import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
 import router from "./routes/index";
 import { errorHandler } from "./middleware/middleware";
-
+import corsOptions from "./config/corsOptions";
 
 const PORT = normalizePort(process.env.PORT || "3000");
 const app: Application = express();
@@ -27,8 +27,8 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res, next, options) =>
-		res.status(options.statusCode).send(options.message),
-})
+    res.status(options.statusCode).send(options.message),
+});
 
 const options: Options = {
   host: process.env.DATABASE_HOST,
@@ -41,15 +41,15 @@ const options: Options = {
   expiration: 86400000,
   createDatabaseTable: true,
   endConnectionOnClose: true,
-  charset: 'utf8mb4_bin',
-	schema: {
-		tableName: 'sessions',
-		columnNames: {
-			session_id: 'session_id',
-			expires: 'expires',
-			data: 'data'
-		}
-	}
+  charset: "utf8mb4_bin",
+  schema: {
+    tableName: "sessions",
+    columnNames: {
+      session_id: "session_id",
+      expires: "expires",
+      data: "data",
+    },
+  },
 };
 
 const sessionStore = new MySQLStoreInstance(options);
@@ -64,25 +64,27 @@ const swaggerJsDocs = YAML.load(path.resolve(__dirname, "../api.yaml"));
 // setup docs from our specification file and serve on the /docs route
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
-//Middleware
+// General middleware to handle JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cors());
-app.use(session.default({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  store: sessionStore,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 259200000,
-    httpOnly: true,
-    sameSite: 'none'
-  }
-}))
-app.use(errorHandler)
-app.use(limiter)
+app.use(cors(corsOptions));
+app.use(limiter);
+app.use(
+  session.default({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 259200000, // 3 days in milliseconds
+      httpOnly: true,
+      sameSite: "none",
+    },
+  })
+);
 app.use(router);
+app.use(errorHandler);
 
 
 //Start server
@@ -104,5 +106,3 @@ try {
 }
 
 export { app };
-
-
