@@ -1,8 +1,14 @@
 import { RowDataPacket } from "mysql2";
 
-type EconomicActivity = string;
+type EconomicActivity = {
+  id: string
+  countyId: string
+  activity: string
+};
 
 export interface IConstituency extends RowDataPacket {
+  id: string;
+  countyId: string;
   constituencyCode: string;
   constituencyName: string;
   registeredVoters: number;
