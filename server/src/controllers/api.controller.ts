@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import * as fs from "fs";
-import * as path from "path";
 import { ApiRepository } from "../repository/api.repository";
 import { ICounty } from "../models/county";
 import { AppError, logger, nanoid } from "../util/util";
@@ -56,11 +54,12 @@ export class ApiController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const order = (req.query.order as "ASC" | "DESC") || "ASC"; // Default to "ASC"
+    const order = (req.query.order as "ASC" | "DESC" | "RANDOM") || "RANDOM"; 
 
     try {
-      if (order !== "ASC" && order !== "DESC") {
+      if (order !== "ASC" && order !== "DESC" && order !== "RANDOM") {
         res.status(400).json({ message: "Not a valid size order" });
+        return
       }
 
       const counties = await ApiController.apiRepository.getCountiesBySize(
@@ -69,6 +68,7 @@ export class ApiController {
 
       if (!counties || counties.length === 0) {
         res.status(204).json({ message: "No counties found" });
+        return
       }
 
       res.status(200).json(counties);
@@ -82,17 +82,28 @@ export class ApiController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+
+    const order = (req.query.order as "ASC" | "DESC" | "RANDOM") || "RANDOM"; 
+
     try {
+
+      if (order !== "ASC" && order !== "DESC" && order !== "RANDOM") {
+        res.status(400).json({ message: "Not a valid size order" });
+        return
+      }
       const counties =
-        await ApiController.apiRepository.getCountiesPopulation();
+        await ApiController.apiRepository.getCountiesPopulation(order);
 
       if (!counties) {
         res.status(404).json({ message: "Counties population not found" });
+        return
       }
       if (counties.length === 0) {
         res.status(204).json({ message: "No counties population" });
+        return
       } else {
         res.status(200).json(counties);
+        return
       }
     } catch (error) {
       next(new AppError("Error in getting counties poulation", 500));
@@ -201,15 +212,15 @@ export class ApiController {
         await ApiController.apiRepository.getConstituenciesByCounty();
 
       if (!constituencies) {
-        res.status(404).json({ message: "No constituencies" });
+        res.status(404).json({ message: "No constituencies found" });
       }
       if (constituencies.length === 0) {
-        res.status(204).json({ message: "No constituencies found" });
+        res.status(204).json({ message: "No constituencies" });
       } else {
         res.status(200).json(constituencies);
       }
     } catch (error) {
-      next(new AppError("Error in getting counties size", 500));
+      next(new AppError("Error in getting county constituencies", 500));
     }
   }
 
@@ -223,10 +234,10 @@ export class ApiController {
         await ApiController.apiRepository.getConstituencies();
 
       if (!constituencies) {
-        res.status(404).json({ message: "No constituencies" });
+        res.status(404).json({ message: "No constituencies found" });
       }
       if (constituencies.length === 0) {
-        res.status(204).json({ message: "No constituencies found" });
+        res.status(204).json({ message: "No constituencies" });
       } else {
         res.status(200).json(constituencies);
       }
