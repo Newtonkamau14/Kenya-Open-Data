@@ -7,12 +7,12 @@ sidebar_position: 2
 It get detailed information about a specific constituency in Kenya based on its constituency code. By providing the constituency code as a query parameter.
 
 ```bash
-    curl -X GET http://localhost:3000/constituencies/:constituencyCode  \
+    curl -X GET https://kenya-open-data.onrender.com/constituencies/:constituencyCode  \
          -H "x-api-key: your api key"
 ```
 For example: 
 ```bash
-    curl -X GET http://localhost:3000/constituencies/002  \
+    curl -X GET https://kenya-open-data.onrender.com/constituencies/002  \
          -H "x-api-key: your api key"
 ```
 

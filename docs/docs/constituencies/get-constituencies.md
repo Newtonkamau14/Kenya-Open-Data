@@ -3,12 +3,14 @@ sidebar_label: "Get all constituencies"
 sidebar_postion: 1
 ---
 
+
+
 # Get all constituencies
 
 This endpoint retrieves a comprehensive list of all constituencies in Kenya, providing essential information about each one.
 
 ```bash
-    curl -X GET http://localhost:3000/constituencies \
+    curl -X GET https://kenya-open-data.onrender.com/constituencies \
          -H "x-api-key: your api key"
 ```
 

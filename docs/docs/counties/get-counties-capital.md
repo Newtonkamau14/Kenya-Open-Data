@@ -8,7 +8,7 @@ sidebar_postion: 9
 This endpoint retrieves a list of counties in Kenya, along with their respective capital cities.
 
 ```bash
-    curl -X GET http://localhost:3000/counties/capital \
+    curl -X GET https://kenya-open-data.onrender.com/counties/capital \
          -H "x-api-key: your api key"
 ```
 
