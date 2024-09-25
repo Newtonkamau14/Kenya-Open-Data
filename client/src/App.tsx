@@ -3,6 +3,13 @@ import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
+import NotFoundPage from "./pages/NotFoundPage";
+import ApiKeyPage from "./pages/ApiKeyPage";
+import Profile from "./pages/Profile";
+import Support from "./pages/Support";
 
 const router = createBrowserRouter([
   {
@@ -15,13 +22,45 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: "/signup",
-        element: <Signup />,
+        element: (
+          <PublicRoute>
+            <Signup />
+          </PublicRoute>
+        ),
       },
     ],
+  },
+  {
+    path: "/app",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/api-key",
+    element: <ApiKeyPage />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+  },
+  {
+    path: "/support",
+    element: <Support />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 
