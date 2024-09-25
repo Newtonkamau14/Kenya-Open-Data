@@ -199,6 +199,13 @@ paths:
     get:
       summary:
       tags: [Counties]
+      parameters:
+        - in: query
+          name: size
+          schema: 
+            type: string
+            required: true
+            description: The counties will be sorted in ascending or descending order. Use "ASC" for ascending and "DESC" for descending.
       responses:
           200:
             description:
