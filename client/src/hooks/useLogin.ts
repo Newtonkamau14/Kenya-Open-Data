@@ -15,14 +15,14 @@ export const useLogin = () => {
       const response = await axiosInstance.post("/auth/login", {
         email,
         password,
+      },{
+        withCredentials: true
       });
 
       if (response.status === 200) {
-        //save user to local storage
-        localStorage.setItem("user", JSON.stringify(response.data));
-
+        console.log(response.data)
         //update the auth context
-        dispatch({ type: "LOGIN", payload: response.data });
+        dispatch({ type: "LOGIN", payload: response.data});
         setIsLoading(false);
       }
     } catch (error) {

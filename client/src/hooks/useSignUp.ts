@@ -22,14 +22,15 @@ export const useSignUp = () => {
         email,
         password,
         phonenumber,
+      },{
+        withCredentials: true
       });
 
       if (response.status === 201) {
-        //save user to local storage
-        localStorage.setItem("user", JSON.stringify(response));
 
         //update the auth context
         dispatch({ type: "LOGIN", payload: response.data });
+        console.log(response.data)
         setIsLoading(false);
       }
     } catch (error) {
