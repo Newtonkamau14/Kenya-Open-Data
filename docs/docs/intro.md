@@ -31,6 +31,9 @@ Alternatively, you can pass the API key as a query parameter:
 
 When there is other query parameters the `API_KEY` paramter should come first.
 
+## Try it out
+Once you get your API key, you can start using the API.[Link](https://kenya-open-data.onrender.com/api-docs)
+
 
 ## Rate Limiting
 
