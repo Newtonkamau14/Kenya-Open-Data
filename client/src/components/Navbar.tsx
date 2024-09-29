@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 import logo from "../assets/logo.svg";
 
 function Navbar() {
+  const {
+    state: { user },
+  } = useAuthContext();
+
   return (
     <header className="bg-white border-1">
       <nav className="flex justify-around items-center w-[92%] mx-auto">
@@ -40,20 +45,43 @@ function Navbar() {
             </li>
           </ul>
         </div>
+
         <ul className="flex gap-4">
-          <li>
-            <Link className="items-end" to="/login">
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="bg-[#357de8] text-white px-4 py-2 rounded-md hover:bg-[#7298ee]"
-              to="/signup"
-            >
-              Sign up
-            </Link>
-          </li>
+          {user ? (
+            <li className="items-center bg-[#357de8] text-white px-4 py-2 rounded-md hover:bg-[#7298ee]">
+              <Link
+                to="/app"
+              >
+                App
+                <svg
+                  className="w-6 h-6 text-white ml-3 inline-block fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#fffff"
+                >
+                  <path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z" />
+                </svg>
+              </Link>
+            </li>
+          ) : (
+            <>
+              <li>
+                <Link className="items-end" to="/login">
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="bg-[#357de8] text-white px-4 py-2 rounded-md hover:bg-[#7298ee]"
+                  to="/signup"
+                >
+                  Sign up
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </header>
