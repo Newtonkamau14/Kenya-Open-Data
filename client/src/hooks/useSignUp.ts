@@ -17,20 +17,19 @@ export const useSignUp = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await axiosInstance.post("/auth/signup", {
-        username,
-        email,
-        password,
-        phonenumber,
-      },{
-        withCredentials: true
-      });
+      const response = await axiosInstance.post(
+        "/auth/signup",
+        {
+          username,
+          email,
+          password,
+          phonenumber,
+        },
+      );
 
       if (response.status === 201) {
-
         //update the auth context
         dispatch({ type: "LOGIN", payload: response.data });
-        console.log(response.data)
         setIsLoading(false);
       }
     } catch (error) {

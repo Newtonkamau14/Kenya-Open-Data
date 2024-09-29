@@ -15,12 +15,9 @@ export const useLogin = () => {
       const response = await axiosInstance.post("/auth/login", {
         email,
         password,
-      },{
-        withCredentials: true
       });
 
       if (response.status === 200) {
-        console.log(response.data)
         //update the auth context
         dispatch({ type: "LOGIN", payload: response.data});
         setIsLoading(false);
