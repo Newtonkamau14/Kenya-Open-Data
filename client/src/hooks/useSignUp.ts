@@ -9,10 +9,8 @@ export const useSignUp = () => {
   const { dispatch } = useAuthContext();
 
   const signUp = async (
-    username: string,
     email: string,
     password: string,
-    phonenumber: string
   ) => {
     try {
       setIsLoading(true);
@@ -20,10 +18,8 @@ export const useSignUp = () => {
       const response = await axiosInstance.post(
         "/auth/signup",
         {
-          username,
           email,
           password,
-          phonenumber,
         },
       );
 
