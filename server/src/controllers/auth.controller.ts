@@ -39,7 +39,13 @@ export class AuthController {
       } else {
         const newUser = await AuthController.authRepository.signUp(user);
         req.session.userId = newUser.id;
-        res.status(201).json({ message: "Account created successfully" });
+        req.session.save();
+        res.status(201).json({
+          message: "Account created successfully",
+          user: {
+            id: newUser.id,
+          },
+        });
       }
     } catch (error) {
       next(new AppError("Error in signing up user", 500));
@@ -92,7 +98,11 @@ export class AuthController {
       }
 
       req.session.userId = user.id;
-      res.status(200).json({ message: "Logged in successfully" });
+      req.session.save();
+      res.status(200).json({
+        message: "Logged in successfully",
+        user: { id: user.id },
+      });
     } catch (error) {
       next(new AppError("Error logging in user", 500));
     }
@@ -122,6 +132,21 @@ export class AuthController {
       });
     } catch (error) {
       next(new AppError("Error logging out user", 500));
+    }
+  }
+
+  static async checkSession(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    if (req.session.userId) {
+      const getUser = await AuthController.authRepository.getUsername(req.session.userId)
+      req.session.username = getUser?.username
+      const user = { userId: req.session.userId, username: req.session.username };
+      res.json(user);
+    } else {
+      res.status(401).json({ message: "Not Authenticated" });
     }
   }
 }
