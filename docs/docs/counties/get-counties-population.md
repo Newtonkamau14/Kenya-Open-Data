@@ -8,14 +8,14 @@ sidebar_postion: 5
 This endpoint retrieves information about the population of each county in Kenya.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/population \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/population \
          -H "x-api-key: your api key"
 ```
 
 By default, counties are listed in a random order. To sort them, use the order query parameter. Valid values are ASC for ascending order or DESC for descending order.For example:
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/population?order=DESC \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/population?order=DESC \
          -H "x-api-key: your api key"
 ```
 

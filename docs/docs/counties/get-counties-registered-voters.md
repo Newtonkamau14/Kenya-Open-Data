@@ -8,7 +8,7 @@ sidebar_postion: 8
 This endpoint retrieves information about the number of registered voters in each county of Kenya.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/registeredvoters \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/registeredvoters \
          -H "x-api-key: your api key"
 ```
 

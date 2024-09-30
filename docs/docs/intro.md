@@ -18,7 +18,7 @@ Place the API key in the `x-api-key` header:
 
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties \
          -H "x-api-key: your api key"
 ```
 
@@ -26,7 +26,7 @@ Alternatively, you can pass the API key as a query parameter:
 
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties?API_KEY=your api key 
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties?API_KEY=your api key 
 ```
 
 When there is other query parameters the `API_KEY` paramter should come first.

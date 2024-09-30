@@ -8,7 +8,7 @@ sidebar_postion: 6
 This endpoint retrieves information about the population density of each county in Kenya.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/populationdensity \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/populationdensity \
          -H "x-api-key: your api key"
 ```
 

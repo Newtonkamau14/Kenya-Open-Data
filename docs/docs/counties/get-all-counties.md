@@ -8,7 +8,7 @@ sidebar_postion: 1
 This endpoint retrieves a comprehensive list of all counties in Kenya, providing essential information about each one.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties \
          -H "x-api-key: your api key"
 ```
 

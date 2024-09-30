@@ -8,7 +8,7 @@ sidebar_postion: 7
 This endpoint retrieves information about the number of households in each county of Kenya.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/households \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/households \
          -H "x-api-key: your api key"
 ```
 

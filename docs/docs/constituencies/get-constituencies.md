@@ -10,7 +10,7 @@ sidebar_postion: 1
 This endpoint retrieves a comprehensive list of all constituencies in Kenya, providing essential information about each one.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/constituencies \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/constituencies \
          -H "x-api-key: your api key"
 ```
 

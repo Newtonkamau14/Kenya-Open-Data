@@ -7,14 +7,14 @@ sidebar_postion: 2
 This endpoint retrieves detailed information about a specific county in Kenya based on its county code as a query parameter.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/:countyCode  \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/:countyCode  \
          -H "x-api-key: your api key"
 ```
 
 For example: 
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/001  \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/001  \
          -H "x-api-key: your api key"
 ```
 

@@ -8,14 +8,14 @@ sidebar_postion: 4
 This endpoint retrieves a list of counties in Kenya, sorted or filtered based on their size (area).
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/size \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/size \
          -H "x-api-key: your api key"
 ```
 
 By default, counties are listed in a random order. To sort them, use the order query parameter. Valid values are ASC for ascending order or DESC for descending order.For example:
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/size?order=DESC \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/size?order=DESC \
          -H "x-api-key: your api key"
 ```
 

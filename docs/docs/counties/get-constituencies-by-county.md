@@ -8,7 +8,7 @@ sidebar_postion: 10
 This endpoint retrieves a list of constituencies within a specific county in Kenya.
 
 ```bash
-    curl -X GET https://kenya-open-data.onrender.com/counties/constituencies \
+    curl -X GET https://kenya-open-data.onrender.com/api/v1/counties/constituencies \
          -H "x-api-key: your api key"
 ```
 
