@@ -75,7 +75,7 @@ const config: Config = {
           position: "right",
         },
         {
-          href: "https://google.com",
+          href: "https://kenya-open-data-client.onrender.com/login",
           label: "Login/Sign Up",
           position: "right",
         },
