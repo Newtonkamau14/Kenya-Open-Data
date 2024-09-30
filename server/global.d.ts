@@ -19,6 +19,7 @@ declare global {
       DATABASE_PORT: number;
       SESSION_SECRET: string;
       API_URL: string
+      REACT_FRONTEND_URL: string
     }
   }
 }
