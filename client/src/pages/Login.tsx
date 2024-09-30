@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { useState } from "react";
+import Footer from "../components/Footer";
 
 function Login() {
   const [email, setEmail] = useState<string>("");
@@ -12,9 +13,9 @@ function Login() {
     login(email, password);
   };
   return (
-    <section className="bg-gray-50 h-screen">
+    <section className="h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-100 dark:border-gray-700">
+        <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-[#F3F4F6] border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl ">
               Login
@@ -76,6 +77,8 @@ function Login() {
           </div>
         </div>
       </div>
+
+      <Footer/>
     </section>
   );
 }

@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSignUp } from "../hooks/useSignUp";
+import Footer from "../components/Footer";
 
 function Signup() {
-  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [phonenumber, setPhonenumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const { signUp, error, isLoading } = useSignUp();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await signUp(username, email, password, phonenumber);
+    await signUp(email, password);
   };
 
   return (
-    <section className="bg-gray-50 h-screen">
+    <section className="h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-100 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -24,25 +23,6 @@ function Signup() {
               Create an account
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-            <div>
-                
-                <label
-                  htmlFor="username"
-                  className="block mb-2 text-sm font-medium  "
-                >
-                  Your username
-                </label>
-                <input
-                  type="text"
-                  name="username"
-                  id="username"
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="John Doe"
-                  onChange={(e) => setUsername(e.target.value)}
-                  value={username}
-
-                />
-              </div>
               <div>
                 <label
                   htmlFor="email"
@@ -58,23 +38,6 @@ function Signup() {
                   placeholder="user@gmail.com"
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="phonenumber"
-                  className="block mb-2 text-sm font-medium  "
-                >
-                  Your phonenumber
-                </label>
-                <input
-                  type="text"
-                  name="phonenumber"
-                  id="phonenumber"
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="user@gmail.com"
-                  onChange={(e) => setPhonenumber(e.target.value)}
-                  value={phonenumber}
                 />
               </div>
               <div>
@@ -153,6 +116,7 @@ function Signup() {
           </div>
         </div>
       </div>
+      <Footer />
     </section>
   );
 }
