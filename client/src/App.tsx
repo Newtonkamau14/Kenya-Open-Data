@@ -7,9 +7,12 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import NotFoundPage from "./pages/NotFoundPage";
-import ApiKeyPage from "./pages/ApiKeyPage";
 import Profile from "./pages/Profile";
 import Support from "./pages/Support";
+import DashboardLayout from "./pages/DashboardLayout";
+import ApiManagement from "./pages/ApiManagement";
+import Credits from "./pages/Credits";
+import Settings from "./pages/Settings";
 
 const router = createBrowserRouter([
   {
@@ -40,23 +43,58 @@ const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/api-key",
-    element: <ApiKeyPage />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
-    path: "/support",
-    element: <Support />,
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "/app",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/app/api-key",
+        element: (
+          <ProtectedRoute>
+            <ApiManagement />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/app/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/app/support",
+        element: (
+          <ProtectedRoute>
+            <Support />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "/app/credits",
+        element: (
+          <ProtectedRoute>
+            <Credits />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/app/settings",
+        element: (
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   },
   {
     path: "*",
