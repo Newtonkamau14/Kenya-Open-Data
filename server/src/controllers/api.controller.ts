@@ -32,7 +32,6 @@ export class ApiController {
 
     if (!countyCode || typeof countyCode !== "string") {
       res.status(400).json({ message: "Invalid county code" });
-      return;
     }
     try {
       const county = await ApiController.apiRepository.getCountyByCountyCode(
@@ -54,12 +53,11 @@ export class ApiController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const order = (req.query.order as "ASC" | "DESC" | "RANDOM") || "RANDOM"; 
+    const order = (req.query.order as "ASC" | "DESC" | "RANDOM") || "RANDOM";
 
     try {
       if (order !== "ASC" && order !== "DESC" && order !== "RANDOM") {
         res.status(400).json({ message: "Not a valid size order" });
-        return
       }
 
       const counties = await ApiController.apiRepository.getCountiesBySize(
@@ -68,7 +66,6 @@ export class ApiController {
 
       if (!counties || counties.length === 0) {
         res.status(204).json({ message: "No counties found" });
-        return
       }
 
       res.status(200).json(counties);
@@ -82,28 +79,23 @@ export class ApiController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-
-    const order = (req.query.order as "ASC" | "DESC" | "RANDOM") || "RANDOM"; 
+    const order = (req.query.order as "ASC" | "DESC" | "RANDOM") || "RANDOM";
 
     try {
-
       if (order !== "ASC" && order !== "DESC" && order !== "RANDOM") {
         res.status(400).json({ message: "Not a valid size order" });
-        return
       }
-      const counties =
-        await ApiController.apiRepository.getCountiesPopulation(order);
+      const counties = await ApiController.apiRepository.getCountiesPopulation(
+        order
+      );
 
       if (!counties) {
         res.status(404).json({ message: "Counties population not found" });
-        return
       }
       if (counties.length === 0) {
         res.status(204).json({ message: "No counties population" });
-        return
       } else {
         res.status(200).json(counties);
-        return
       }
     } catch (error) {
       next(new AppError("Error in getting counties poulation", 500));
