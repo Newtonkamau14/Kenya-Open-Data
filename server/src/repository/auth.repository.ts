@@ -1,6 +1,6 @@
 import { ResultSetHeader } from "mysql2";
 import { connection } from "../config/database";
-import { generateAPIKey, nanoid } from "../util/util";
+import { nanoid } from "../util/util";
 import crypto from "crypto";
 import { IUser } from "../models/user";
 
@@ -37,9 +37,12 @@ export class AuthRepository {
       const hashedPassword = crypto
         .pbkdf2Sync(user.password, salt, 1000, 64, "sha512")
         .toString("hex");
+
+      const index = user.email.indexOf("@");
+      const username = user.email.slice(0, index);
       connection.query<ResultSetHeader>(
-        `INSERT INTO users(id, email, password, salt) VALUES(?, ?, ?, ?)`,
-        [id, user.email, hashedPassword, salt],
+        `INSERT INTO users(id, username, email, password, salt) VALUES(?, ?, ?, ?, ?)`,
+        [id, username, user.email, hashedPassword, salt],
         (err, result) => {
           if (err) {
             reject(err);
@@ -74,27 +77,11 @@ export class AuthRepository {
     });
   }
 
-  addApiKey(id: string): Promise<IUser | undefined> {
-    return new Promise((resolve, reject) => {
-      const apiKey = generateAPIKey();
-      connection.query<IUser[]>(
-        `UPDATE users SET apiKey = ? WHERE id= ${id}`,
-        [apiKey],
-        (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results?.[0]);
-          }
-        }
-      );
-    });
-  }
-  getApiKey(apiKey: string): Promise<IUser | undefined> {
+  getUsername(userId: string): Promise<IUser | undefined> {
     return new Promise((resolve, reject) => {
       connection.query<IUser[]>(
-        `SELECT apiKey FROM users WHERE apiKey = ?`,
-        [apiKey],
+        `SELECT id,username FROM users WHERE id = ?`,
+        [userId],
         (err, results) => {
           if (err) {
             reject(err);
