@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axios";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 type ApiKeyData = {
   name: string;
@@ -70,8 +71,6 @@ function ApiManagement() {
       setIsLoading(true); // Start loading when fetching
       const response = await axiosInstance.get("/api-key");
 
-      console.log("Response from /api-key:", response); // Add logging here
-
       if (response.status === 200) {
         setApiKeyData(response.data);
         setIsLoading(false); // Stop loading after fetching data
@@ -108,7 +107,7 @@ function ApiManagement() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -196,7 +195,7 @@ function ApiManagement() {
             onChange={(e) => setApiKeyName(e.target.value)}
             value={apiKeyName}
           />
-          <button className="bg-[#357de8] px-4 py-2 rounded-md text-white hover:bg-[#7298ee]">
+          <button className="bg-[#357de8] px-4 py-2 rounded-md text-white hover:bg-[#7298ee] md:mt-2 sm:mt-2">
             <svg
               className="w-5 h-5 inline-block mr-1"
               xmlns="http://www.w3.org/2000/svg"
