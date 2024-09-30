@@ -18,6 +18,7 @@ declare global {
       DATABASE_NAME: string;
       DATABASE_PORT: number;
       SESSION_SECRET: string;
+      API_URL: string
     }
   }
 }
@@ -25,5 +26,6 @@ declare global {
 declare module "express-session" {
   interface SessionData {
     userId: string;
+    username: string
   }
 }
