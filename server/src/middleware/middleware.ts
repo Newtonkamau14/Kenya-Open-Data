@@ -1,11 +1,16 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
+import { ApiKeyRepository } from "../repository/api-key.repository";
 import { AuthRepository } from "../repository/auth.repository";
-import { connection } from "../config/database";
-import { IUser } from "../models/user";
 
 
-const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (req.session.userId) {
+const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+  const authRepository = new AuthRepository();
+  const userId = req.session.userId;
+
+
+  if (userId) {
+    const user = await authRepository.getUsername(userId)
+    req.session.username = user?.username
     next();
   } else {
     res
@@ -14,12 +19,15 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-
-const authenticateKey = async (req: Request, res: Response, next: NextFunction) => {
-  const authRepository = new AuthRepository();
+const authenticateKey = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const apiKeyRepository = new ApiKeyRepository();
   let API_KEY = req.headers["x-api-key"] as string | undefined;
 
-  if(!API_KEY){
+  if (!API_KEY) {
     API_KEY = req.query.API_KEY as string;
   }
 
@@ -29,9 +37,10 @@ const authenticateKey = async (req: Request, res: Response, next: NextFunction) 
     });
   }
 
-  const user = await authRepository.getApiKey(API_KEY); // Assuming this returns IUser | undefined
+  const user = await apiKeyRepository.getApiKeyAuth(API_KEY); // Assuming this returns IUser | undefined
 
-  if (!user || user.apiKey !== API_KEY) { // Compare with the user's apiKey field
+  if (!user || user.apiKey !== API_KEY) {
+    // Compare with the user's apiKey field
     return res.status(403).json({
       message: "Forbidden",
     });
@@ -39,7 +48,6 @@ const authenticateKey = async (req: Request, res: Response, next: NextFunction) 
 
   next();
 };
-
 
 const errorHandler: ErrorRequestHandler = (
   err,
@@ -58,4 +66,4 @@ const errorHandler: ErrorRequestHandler = (
   });
 };
 
-export { requireAuth,authenticateKey,errorHandler };
+export { requireAuth, authenticateKey, errorHandler };
