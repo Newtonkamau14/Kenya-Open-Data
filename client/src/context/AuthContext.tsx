@@ -1,9 +1,10 @@
-import React, { createContext, ReactNode, useEffect, useReducer } from "react";
+import React, { createContext, ReactNode, useEffect, useReducer, useState } from "react";
+import axios from "../api/axios";
+import Loading from "../components/Loading";
 
 interface IUser {
-  email: ReactNode;
-  username: string
-  token: string
+  username: string;
+  userId: string;
 }
 
 interface AuthState {
@@ -21,7 +22,10 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+export const authReducer = (
+  state: AuthState,
+  action: AuthAction
+): AuthState => {
   switch (action.type) {
     case "LOGIN":
       return {
@@ -40,15 +44,36 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(authReducer, { user: null });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-      const user = JSON.parse(localStorage.getItem('user'))
-      if(user){
-        dispatch({type: "LOGIN",payload:user})
+    const checkSession = async () => {
+      try {
+        setLoading(true)
+        const response = await axios.get("/auth/check-session");
+
+        if (response.status === 200 && response.data) {
+          const user = response.data;
+          dispatch({ type: "LOGIN", payload: user });
+        } else {
+          console.error("Unexpected response:", response);
+          dispatch({ type: "LOGOUT", payload: null });
+        }
+        
+      } catch (error) {
+        dispatch({ type: "LOGOUT", payload: null });
       }
-  },[])
+      finally {
+        setLoading(false)
+      }
+    };
+    checkSession();
+  }, []);
 
 
+  if(loading) {
+    return (<Loading/>)
+  }
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
       {children}
