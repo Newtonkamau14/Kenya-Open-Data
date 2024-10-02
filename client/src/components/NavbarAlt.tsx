@@ -6,10 +6,11 @@ import logo from "../assets/logo.svg";
 
 function NavbarAlt() {
   const { logout } = useLogout();
-  const { state} = useAuthContext();
+  const { state } = useAuthContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const user = state.user
+  const user = state.user;
+
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
