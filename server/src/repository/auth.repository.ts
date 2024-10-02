@@ -10,6 +10,7 @@ export class AuthRepository {
       connection.query<IUser[]>(
         `SELECT
            id,
+           username,
            email,
            password,
            salt
