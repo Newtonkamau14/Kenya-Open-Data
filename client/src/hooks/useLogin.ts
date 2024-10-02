@@ -1,12 +1,16 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "./useAuthContext";
 import axiosInstance from "../api/axios";
-import axios from "axios";
+
 
 export const useLogin = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useAuthContext();
+  const navigate = useNavigate()
+
 
   const login = async (email: string, password: string) => {
     try {
@@ -19,8 +23,12 @@ export const useLogin = () => {
 
       if (response.status === 200) {
         //update the auth context
+        sessionStorage.setItem("user", JSON.stringify(response.data));
         dispatch({ type: "LOGIN", payload: response.data});
         setIsLoading(false);
+      }
+      else {
+        navigate("/login")
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

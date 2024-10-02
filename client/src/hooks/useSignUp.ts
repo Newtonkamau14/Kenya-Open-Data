@@ -25,6 +25,8 @@ export const useSignUp = () => {
 
       if (response.status === 201) {
         //update the auth context
+
+        sessionStorage.setItem("user", JSON.stringify(response.data));
         dispatch({ type: "LOGIN", payload: response.data });
         setIsLoading(false);
       }
