@@ -43,7 +43,7 @@ export class AuthController {
 
         req.session.save();
         res.status(201).json({
-          id: newUser.id,
+          userId: newUser.id,
           username: newUser.username,
         });
       }
@@ -101,7 +101,7 @@ export class AuthController {
       req.session.username = user.username;
       req.session.save();
       res.status(200).json({
-        id: user.id,
+        userId: user.id,
         username: user.username,
       });
     } catch (error) {

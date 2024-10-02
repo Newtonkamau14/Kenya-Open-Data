@@ -8,7 +8,7 @@ import React, {
 import Loading from "../components/Loading";
 
 interface IUser {
-  id: string;
+  userId: string;
   username: string;
 }
 
