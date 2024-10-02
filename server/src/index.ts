@@ -73,13 +73,13 @@ app.use(
   session.default({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: sessionStore,
     cookie: {
       secure: process.env.NODE_ENV === "production",
       maxAge: 259200000, // 3 days in milliseconds
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "strict",
     },
   })
 );
