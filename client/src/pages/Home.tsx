@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import arrow_right from "../assets/arrow_right.svg";
+import bolt from "../assets/bolt.svg";
+import lock from "../assets/lock.svg";
+import code from "../assets/code.svg";
 import Footer from "../components/Footer";
 
 function Home() {
   return (
     <div>
       <section className="h-[75vh] flex flex-col justify-center items-center">
-        <h1 className="text-6xl text-center font-bold">
+        <h1 className="text-6xl text-center font-bold mx-2">
           Effortlessly Explore County Data with Our API.
         </h1>
         <p className="text-2xl text-center mt-4">
@@ -26,40 +29,47 @@ function Home() {
         </Link>
       </section>
 
-      <section className="bg-[#F3F4F6] h-[60vh] pt-8 pb-4 py-4">
-        <h1 className="text-center text-5xl font-semibold flex justify-center flex-col my-16 items-center">
+      <section className="bg-[#F3F4F6] h-[60vh] pt-8 pb-4 py-4 w-full">
+        <h1 className="text-center text-5xl font-semibold flex justify-center flex-col my-6 items-center">
           Key Features
         </h1>
+        <div className="flex flex-row justify-center items-center">
+          <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow mx-4 ">
+            <img src={bolt} alt="bolt" className="w-10 h-10 mb-3" />
+            <h5 className="mb-2 text-2xl font-semibold tracking-tight">
+              High Performance{" "}
+            </h5>
+            <p className="mt-6 font-normal">
+              Lightning-fast API responses with global CDN support and optimized
+              routing.
+            </p>
+          </div>
 
-        <div className="flex flex-row gap-4">
-          <div className="bg-white border-0 shadow-sm rounded-md px-4 py-2 h-1/3 ml-4">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente,
-              laboriosam! Aliquam eos illo deserunt veritatis non suscipit sed
-              dignissimos reiciendis, officia officiis nulla atque expedita ea
-              aliquid eligendi consectetur facilis.
+          <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow mx-4 md:max-w-2xl">
+            <img src={lock} alt="lock" className="w-10 h-10 mb-3" />
+            <h5 className="mb-2 text-2xl font-semibold tracking-tight">
+              Advanced Security
+            </h5>
+            <p className="mt-6 font-normal">
+              Protect your APIs with OAuth 2.0, API keys, and customizable
+              access controls.
             </p>
           </div>
-          <div className="bg-white border-0 shadow-sm rounded-md px-4 py-2 h-1/3">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente,
-              laboriosam! Aliquam eos illo deserunt veritatis non suscipit sed
-              dignissimos reiciendis, officia officiis nulla atque expedita ea
-              aliquid eligendi consectetur facilis.
-            </p>
-          </div>
-          <div className="bg-white border-0 shadow-sm rounded-md px-4 py-2 h-1/3 mr-4">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente,
-              laboriosam! Aliquam eos illo deserunt veritatis non suscipit sed
-              dignissimos reiciendis, officia officiis nulla atque expedita ea
-              aliquid eligendi consectetur facilis.
+
+          <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow mx-4 md:max-w-2xl">
+            <img src={code} alt="code" className="w-10 h-10 mb-3" />
+            <h5 className="mb-2 text-2xl font-semibold tracking-tight">
+              Developer-Friendly
+            </h5>
+            <p className="mt-6 font-normal">
+              Comprehensive documentation, SDKs, and intuitive dashboards for
+              easy integration.
             </p>
           </div>
         </div>
       </section>
 
-      <section className=" h-[60vh] pt-8 pb-4 py-4">
+      <section className=" h-[60vh] pt-8 pb-4 py-4 my-8">
         <h1 className="text-center text-5xl font-semibold flex justify-center flex-col my-16 items-center">
           Pricing
         </h1>
@@ -67,13 +77,14 @@ function Home() {
         <h4 className="text-3xl font-medium text-center">To be announced</h4>
       </section>
 
-
       <section className="bg-[#F3F4F6] h-[75vh] flex flex-col justify-center items-center">
-        <h1 className="text-6xl text-center font-bold">
-        Comprehensive Documentation
+        <h1 className="text-6xl text-center font-bold mx-2">
+          Comprehensive Documentation
         </h1>
         <p className="text-2xl text-center mt-4">
-        Our clear and concise documentation makes it easy to find the information you need.        </p>
+          Our clear and concise documentation makes it easy to find the
+          information you need.{" "}
+        </p>
         <Link
           to="https://newtonkamau14.github.io/Kenya-Open-Data/"
           className="text-white text-xl bg-[#357de8] pl-6 pr-4 py-2 rounded-sm hover:bg-[#7298ee] my-4 flex items-center"
