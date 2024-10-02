@@ -20,16 +20,17 @@ export class ApiKeyController {
           userId
         );
         res.status(201).json({ message: "API Key created successfully" });
-      } else {
-        next(new AppError("Please login to your account or create one", 401));
       }
     } catch (error) {
       next(new AppError("Error in creating apikey", 500));
-      console.log(error);
     }
   }
 
-  static async getApiKeyClient(req: Request, res: Response, next: NextFunction) {
+  static async getApiKeyClient(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const userId = req.session.userId;
       if (userId) {
@@ -37,9 +38,6 @@ export class ApiKeyController {
           userId
         );
         res.status(200).json(apiKey);
-      } 
-      else {
-        return next(new AppError("Unauthorized access", 401));
       }
     } catch (error) {
       next(new AppError("Error in getting api key", 500));
@@ -48,14 +46,13 @@ export class ApiKeyController {
 
   static async deleteApiKey(req: Request, res: Response, next: NextFunction) {
     try {
-      const userId = req.session.userId
+      const userId = req.session.userId;
 
-      if(userId) {
-        const apiKey = await ApiKeyController.ApiKeyRepository.deleteApiKey(userId)
-        res.status(200).json({message : "API Key deleted"})
-      }
-      else {
-        return next(new AppError("Unauthorized access", 401));
+      if (userId) {
+        const apiKey = await ApiKeyController.ApiKeyRepository.deleteApiKey(
+          userId
+        );
+        res.status(200).json({ message: "API Key deleted" });
       }
     } catch (error) {
       next(new AppError("Error in deleting API Key", 500));
