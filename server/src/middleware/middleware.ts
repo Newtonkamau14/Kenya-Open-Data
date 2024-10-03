@@ -3,22 +3,16 @@ import { ApiKeyRepository } from "../repository/api-key.repository";
 import { AuthRepository } from "../repository/auth.repository";
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const authRepository = new AuthRepository();
-  const userId = req.session.userId;
-
-  if (!userId) {
-    return res
-      .status(401)
-      .json({ message: "Sign up or log in to your existing account" });
+  if (!req.session || !req.session.userId) {
+    // User is not logged in
+    return res.status(401).json({ error: 'Unauthorized: Please log in to access this resource' });
   }
 
-  const user = await authRepository.getUsername(userId);
+  // User is logged in, but you may want to perform additional checks here
+  // For example, you could check if the user has the necessary permissions
 
-  if (userId === user?.id) {
-    next();
-  } else {
-    res.status(403).json({ message: "You need to be logged in to view this." });
-  }
+  // If everything is okay, call next() to proceed to the next middleware or route handler
+  next();
 };
 
 const authenticateKey = async (

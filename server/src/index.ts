@@ -80,7 +80,7 @@ app.use(
       secure: process.env.NODE_ENV === "production",
       maxAge: 259200000, // 3 days in milliseconds
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
     },
   })
 );
