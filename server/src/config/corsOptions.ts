@@ -18,7 +18,6 @@ const corsOptions: CorsOptions = {
     }
   },
   methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Allow credentials
   optionsSuccessStatus: 200, // For legacy browsers
 };
