@@ -64,12 +64,12 @@ const swaggerJsDocs = YAML.load(path.resolve(__dirname, "../api.yaml"));
 // setup docs from our specification file and serve on the /docs route
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
+// Import necessary modules and middlewares first
+
 // General middleware to handle JSON and URL-encoded data
 app.use(express.json());
-app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
-app.options('*', cors(corsOptions)); // Handle preflight requests
-app.use(limiter);
+// Session configuration (should come before CORS and other middlewares)
 app.use(
   session.default({
     secret: process.env.SESSION_SECRET,
@@ -80,16 +80,25 @@ app.use(
       secure: process.env.NODE_ENV === "production",
       maxAge: 259200000, // 3 days in milliseconds
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none", // SameSite=none for cross-origin cookies
     },
   })
 );
+// CORS middleware (comes after session)
+app.use(cors(corsOptions)); // Ensure corsOptions includes credentials: true
+app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
+// Apply rate limiter (after CORS, so CORS is not blocked)
+app.use(limiter);
+// Set Access-Control-Allow-Credentials header (if not already in CORS config)
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
+// Routes and main logic (should come after all general middleware)
 app.use(router);
+// Error handling middleware (placed after routes)
 app.use(errorHandler);
+
 
 
 //Start server

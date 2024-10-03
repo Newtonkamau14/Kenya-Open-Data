@@ -5,13 +5,8 @@ import { AuthRepository } from "../repository/auth.repository";
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.session || !req.session.userId) {
     // User is not logged in
-    return res.status(401).json({ error: 'Unauthorized: Please log in to access this resource' });
+    return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource' });
   }
-
-  // User is logged in, but you may want to perform additional checks here
-  // For example, you could check if the user has the necessary permissions
-
-  // If everything is okay, call next() to proceed to the next middleware or route handler
   next();
 };
 
