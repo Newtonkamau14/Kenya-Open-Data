@@ -1,5 +1,5 @@
-import { CorsOptions } from "cors";
-import allowedOrigins from "./allowedOrigins";
+import { CorsOptions } from 'cors';
+import allowedOrigins from './allowedOrigins';
 
 const corsOptions: CorsOptions = {
   origin: (
@@ -10,15 +10,17 @@ const corsOptions: CorsOptions = {
       // Origin is allowed and present, grant access
       callback(null, true);
     } else if (!origin) {
-      // No origin specified, potentially a preflight request. Allow for flexibility.
+      // No origin specified (e.g., for a preflight or server-to-server request)
       callback(null, true);
     } else {
       // Origin is not allowed, deny access
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  optionsSuccessStatus: 200,
-  credentials: true,
+  methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true, // Allow credentials
+  optionsSuccessStatus: 200, // For legacy browsers
 };
 
 export default corsOptions;

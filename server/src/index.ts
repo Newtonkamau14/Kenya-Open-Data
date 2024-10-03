@@ -66,8 +66,9 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
 // General middleware to handle JSON and URL-encoded data
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: false }));
+app.options('*', cors(corsOptions)); // Handle preflight requests
 app.use(limiter);
 app.use(
   session.default({
@@ -83,6 +84,10 @@ app.use(
     },
   })
 );
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 app.use(router);
 app.use(errorHandler);
 
