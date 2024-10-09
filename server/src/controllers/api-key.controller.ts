@@ -14,6 +14,19 @@ export class ApiKeyController {
     try {
       const userId = req.session.userId;
 
+      const apiKey = await ApiKeyController.ApiKeyRepository.getApiKeyClient(
+        userId
+      );
+
+      if (apiKey) {
+        next(
+          new AppError(
+            "There's no need to create another API key. You can use your current one.",
+            403
+          )
+        );
+      }
+
       if (userId) {
         const newKey = await ApiKeyController.ApiKeyRepository.addApiKey(
           apiKeyName,
