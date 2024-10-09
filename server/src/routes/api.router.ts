@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { ApiController } from "../controllers/api.controller";
-import { authenticateKey } from "../middleware/middleware";
+import { authenticateKey,limiter } from "../middleware/middleware";
 const router = Router();
 
-router.use(authenticateKey);
+router.use(authenticateKey,limiter);
 
 router.route("/counties").get(ApiController.getAllCounties);
 router.route("/counties/size").get(ApiController.getCountiesBySize);
