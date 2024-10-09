@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import logo from "../assets/logo.svg";
@@ -8,6 +8,7 @@ function NavbarAlt() {
   const { logout } = useLogout();
   const { state } = useAuthContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement | null>(null);
 
   const user = state.user;
 
@@ -19,6 +20,22 @@ function NavbarAlt() {
   const handleClick = () => {
     logout();
   };
+
+  // Close dropdown when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Clean up the event listener
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <header className="bg-white border-1 shadow">
@@ -51,7 +68,7 @@ function NavbarAlt() {
             </li>
 
             {user && (
-              <li className="relative">
+              <li className="relative" ref={dropdownRef}>
                 <button
                   className="hover:bg-[#F4F4F5] px-4 rounded-md flex items-center"
                   onClick={toggleDropdown}
