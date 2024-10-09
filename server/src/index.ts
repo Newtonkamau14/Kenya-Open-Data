@@ -9,7 +9,6 @@ import cors from "cors";
 import * as session from "express-session";
 import MySQLStore, { Options } from "express-mysql-session";
 import cookieParser from "cookie-parser";
-import { MemoryStore, rateLimit } from "express-rate-limit";
 import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
 import router from "./routes/index";
@@ -20,16 +19,6 @@ const PORT = normalizePort(process.env.PORT || "3000");
 const app: Application = express();
 const MySQLStoreInstance = MySQLStore(session);
 
-//limiter
-const limiter = rateLimit({
-  windowMs: 60000,
-  store: new MemoryStore(),
-  limit: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  handler: (req, res, next, options) =>
-    res.status(options.statusCode).send(options.message),
-});
 
 const options: Options = {
   host: process.env.DATABASE_HOST,
@@ -94,10 +83,6 @@ app.use(
   })
 );
 app.use(cookieParser())
-
-// Apply rate limiter (after CORS, so CORS is not blocked)
-app.use(limiter);
-// Set Access-Control-Allow-Credentials header (if not already in CORS config)
 
 // Routes and main logic (should come after all general middleware)
 app.use(router);
