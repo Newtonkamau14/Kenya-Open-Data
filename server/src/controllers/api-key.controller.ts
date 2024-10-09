@@ -14,11 +14,10 @@ export class ApiKeyController {
     try {
       const userId = req.session.userId;
 
-      const apiKey = await ApiKeyController.ApiKeyRepository.getApiKeyClient(
-        userId
-      );
-
-      if (apiKey) {
+      if (userId) {
+        const apiKey = await ApiKeyController.ApiKeyRepository.getApiKeyClient(
+          userId
+        );
         next(
           new AppError(
             "There's no need to create another API key. You can use your current one.",
