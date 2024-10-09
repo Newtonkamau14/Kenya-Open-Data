@@ -12,8 +12,17 @@ function ApiManagement() {
   const [isVisible, setIsVisible] = useState(false);
   const [apiKeyData, setApiKeyData] = useState<ApiKeyData>({} as ApiKeyData);
   const [apiKeyName, setApiKeyName] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 3000); // Message will disappear after 3 seconds
+  };
+  
 
   const handleDelete = async () => {
     try {
@@ -23,8 +32,8 @@ function ApiManagement() {
       const response = await axiosInstance.delete("/api-key/delete");
 
       if (response.status === 200) {
-        alert("API Key deleted");
-        setIsLoading(false); // Ensure loading is turned off here
+        showAlert("API Key Deleted")
+        fetchKey(); 
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -52,8 +61,9 @@ function ApiManagement() {
       });
 
       if (response.status === 201) {
-        alert("API KEY added");
-        setIsLoading(false); // Ensure loading is turned off here
+        showAlert("API KEY added successfully")
+        setApiKeyName(""); 
+        fetchKey();  
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -87,11 +97,10 @@ function ApiManagement() {
   };
 
   const handleCopy = () => {
-    const apiKey = "19aX0awj0ERDh03UXOIjCnG8zjk6Dnk3a4s6XRoP"; // Example key
     navigator.clipboard
-      .writeText(apiKey)
+      .writeText(apiKeyData.apiKey)
       .then(() => {
-        alert("API key copied to clipboard!");
+        showAlert("API key copied to clipboard!")
       })
       .catch((err) => {
         console.error("Failed to copy text: ", err);
@@ -112,6 +121,11 @@ function ApiManagement() {
 
   return (
     <div className="m-4">
+      {alertMessage && (
+      <div className="bg-blue-50 border border-blue-300 text-blue-500 px-4 py-3 rounded relative mb-4" role="alert">
+        <span className="block sm:inline">{alertMessage}</span>
+      </div>
+    )}
       <h1 className="text-2xl font-bold mb-6">API Management</h1>
 
       <div className="bg-white border border-[#E4E4E7] rounded-md h-1/2">
