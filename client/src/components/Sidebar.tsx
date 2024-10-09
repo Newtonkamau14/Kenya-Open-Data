@@ -3,6 +3,7 @@ import space_dashboard from "../assets/space_dashboard.svg";
 import list from "../assets/list.svg";
 import group from "../assets/group.svg";
 import credit from "../assets/credit.svg";
+import description from "../assets/description.svg";
 
 function Sidebar() {
   const location = useLocation();
@@ -64,6 +65,21 @@ function Sidebar() {
             <img src={credit} alt="credits" className="mx-2 inline-block" />
             <Link to="/app/credits" className="text-lg w-full py-2 px-4">
               Credits
+            </Link>
+          </li>
+
+          <li className="flex items-center w-full text-black rounded-md hover:bg-[#f4f4f5]">
+            <img
+              src={description}
+              alt="credits"
+              className="mx-2 inline-block"
+            />
+            <Link
+              to="https://newtonkamau14.github.io/Kenya-Open-Data/"
+              className="text-lg w-full py-2 px-4"
+              target="_blank"
+            >
+              Documentation
             </Link>
           </li>
         </ul>
