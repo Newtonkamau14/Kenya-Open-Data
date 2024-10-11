@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSignUp } from "../hooks/useSignUp";
 import Footer from "../components/Footer";
 import visibility from "../assets/visibility.svg";
-import visibilityOff from "../assets/visibility_off.svg"; 
+import visibilityOff from "../assets/visibility_off.svg";
 
 function Signup() {
   const [email, setEmail] = useState<string>("");
@@ -29,12 +29,11 @@ function Signup() {
       setPasswordError(null);
     }
   };
-  
 
   useEffect(() => {
     checkPasswordsMatch();
   }, [password, confirmPassword]);
-  
+
   return (
     <>
       <section className="h-screen">
@@ -45,7 +44,7 @@ function Signup() {
                 Create an account
               </h1>
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              {error && <div className="text-red-600">{error}</div>}
+                {error && <div className="text-red-600">{error}</div>}
 
                 <div>
                   <label
@@ -108,8 +107,9 @@ function Signup() {
                       id="confirm-password"
                       placeholder="••••••••"
                       className={`bg-gray-50 border ${
-                        !passwordError ? 'border-red-600' : 'border-gray-300'
-                      } text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}                      onChange={(e) => setConfirmPassword(e.target.value)}
+                        !passwordError ? "border-gray-300" : "border-red-600"
+                      } text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       value={confirmPassword}
                     />
                     <button
@@ -125,6 +125,8 @@ function Signup() {
                     </button>
                   </div>
                 </div>
+                {passwordError && <div className="text-red-600 text-center p-0 m-0">{passwordError}</div>}
+
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -132,9 +134,11 @@ function Signup() {
                       aria-describedby="terms"
                       type="checkbox"
                       className={`bg-gray-50 border ${
-                        !passwordError ? 'border-red-600' : 'border-gray-300'
-                      } text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}                    />
+                        !passwordError ? "border-red-600" : "border-gray-300"
+                      } text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                    />
                   </div>
+
                   <div className="ml-3 text-sm">
                     <label htmlFor="terms" className="font-light">
                       I accept the{" "}
@@ -147,6 +151,7 @@ function Signup() {
                     </label>
                   </div>
                 </div>
+
                 <button
                   disabled={isLoading}
                   type="submit"
@@ -165,8 +170,6 @@ function Signup() {
                 </p>
               </form>
             </div>
-            {passwordError && <div className="text-red-600">{passwordError}</div>}
-
           </div>
         </div>
       </section>
