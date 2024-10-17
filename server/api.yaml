@@ -4,7 +4,7 @@ info:
     description: It is an API that gives detailed information about each county, including population, size, leadership, and capital city.Also has data of constituencies.
     version: 1.0.0
 servers:
-  - url: https://kenya-open-data.onrender.com/
+  - url: https://kenya-open-data.onrender.com/api/v1
 
 
 components:
