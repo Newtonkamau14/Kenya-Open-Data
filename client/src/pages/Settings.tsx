@@ -1,5 +1,9 @@
+import PageTitle from "../components/PageTitle";
+
 function Settings() {
   return (
+    <>
+    <PageTitle title="Settings"/>
     <div className="flex justify-center items-center">
       <section>
         <div className="py-8 px-4 mx-auto max-w-screen-md text-center lg:py-16 lg:px-12">
@@ -19,6 +23,7 @@ function Settings() {
         </div>
       </section>
     </div>
+    </>
   );
 }
 

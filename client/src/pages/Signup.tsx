@@ -4,6 +4,7 @@ import { useSignUp } from "../hooks/useSignUp";
 import Footer from "../components/Footer";
 import visibility from "../assets/visibility.svg";
 import visibilityOff from "../assets/visibility_off.svg";
+import PageTitle from "../components/PageTitle";
 
 function Signup() {
   const [email, setEmail] = useState<string>("");
@@ -36,6 +37,7 @@ function Signup() {
 
   return (
     <>
+      <PageTitle title="Signup" />
       <section className="h-screen">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-100 dark:border-gray-700">
@@ -125,7 +127,11 @@ function Signup() {
                     </button>
                   </div>
                 </div>
-                {passwordError && <div className="text-red-600 text-center p-0 m-0">{passwordError}</div>}
+                {passwordError && (
+                  <div className="text-red-600 text-center p-0 m-0">
+                    {passwordError}
+                  </div>
+                )}
 
                 <div className="flex items-start">
                   <div className="flex items-center h-5">

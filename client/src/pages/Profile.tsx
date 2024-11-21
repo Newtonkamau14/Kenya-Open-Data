@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import PageTitle from "../components/PageTitle";
 
 function Profile() {
   return (
+    <>
+    <PageTitle title="Profile"/>
     <div>
       <h1 className="font-medium text-4xl mx-6 mt-4 mb-6">Profile Settings</h1>
 
@@ -75,6 +78,7 @@ function Profile() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Footer from "../components/Footer";
 import visibility from "../assets/visibility.svg";
 import visibilityOff from "../assets/visibility_off.svg"; 
+import PageTitle from "../components/PageTitle";
 
 function Login() {
   const [email, setEmail] = useState<string>("");
@@ -22,6 +23,7 @@ function Login() {
   };
   return (
     <>
+    <PageTitle title="Login"/>
       <section className="h-screen">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-[#F3F4F6] border-gray-700">

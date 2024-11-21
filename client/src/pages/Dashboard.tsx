@@ -1,6 +1,9 @@
+import PageTitle from "../components/PageTitle";
+
 function Dashboard() {
   return (
     <>
+    <PageTitle title="Dashboard"/>
       <div className="flex justify-between mx-auto mt-4">
         <div className="bg-white border-[#E4E4E7] rounded-md w-3/6 h-1/5 m-4 shadow-md">
           <h1 className="text-start text-lg p-4">Total API Calls</h1>
