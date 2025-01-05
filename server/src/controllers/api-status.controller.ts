@@ -13,7 +13,7 @@ export class ApiStatusController {
         message: "API is running",
       });
     } catch (error) {
-      next(new AppError("Internal Server Error.", 500));
+      next(new AppError("Service is unavailable", 503));
     }
   }
 }
