@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import { ApiKeyRepository } from "../repository/api-key.repository";
 import { AppError } from "../util/util";
 
@@ -15,8 +15,9 @@ export class ApiKeyController {
       const userId = req.session.userId;
 
       if (userId) {
-
-        const apiKey = await ApiKeyController.ApiKeyRepository.getApiKeyClient(userId);
+        const apiKey = await ApiKeyController.ApiKeyRepository.getApiKeyClient(
+          userId
+        );
 
         if (apiKey) {
           return next(

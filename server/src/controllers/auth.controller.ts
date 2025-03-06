@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import { IUser } from "../models/user";
 import { AuthRepository } from "../repository/auth.repository";
-import { AppError, logger } from "../util/util";
+import { AppError } from "../util/util";
 
 export class AuthController {
   private static authRepository = new AuthRepository();
@@ -135,6 +135,4 @@ export class AuthController {
       next(new AppError("Error logging out user", 500));
     }
   }
-
- 
 }

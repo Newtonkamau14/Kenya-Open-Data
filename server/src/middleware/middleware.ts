@@ -1,13 +1,18 @@
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
+import {
+  type Request,
+  type Response,
+  type NextFunction,
+  type ErrorRequestHandler,
+} from "express";
 import { MemoryStore, rateLimit } from "express-rate-limit";
 import { ApiKeyRepository } from "../repository/api-key.repository";
-import { AuthRepository } from "../repository/auth.repository";
-
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.session || !req.session.userId) {
     // User is not logged in
-    return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource' });
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Please log in to access this resource" });
   }
   next();
 };
@@ -59,7 +64,6 @@ const errorHandler: ErrorRequestHandler = (
   });
 };
 
-
 const limiter = rateLimit({
   windowMs: 60000,
   store: new MemoryStore(),
@@ -70,4 +74,4 @@ const limiter = rateLimit({
     res.status(options.statusCode).send(options.message),
 });
 
-export { requireAuth, authenticateKey, errorHandler,limiter };
+export { requireAuth, authenticateKey, errorHandler, limiter };

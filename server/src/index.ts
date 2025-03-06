@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express, { Application } from "express";
+import express, { type Application } from "express";
 import YAML from "yamljs";
 import swaggerUI from "swagger-ui-express";
 import path from "path";
 import cors from "cors";
 import * as session from "express-session";
-import MySQLStore, { Options } from "express-mysql-session";
+import MySQLStore, { type Options } from "express-mysql-session";
 import cookieParser from "cookie-parser";
 import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
@@ -18,7 +18,6 @@ import corsOptions from "./config/corsOptions";
 const PORT = normalizePort(process.env.PORT || "3000");
 const app: Application = express();
 const MySQLStoreInstance = MySQLStore(session);
-
 
 const options: Options = {
   host: process.env.DATABASE_HOST,
@@ -44,8 +43,6 @@ const options: Options = {
 
 const sessionStore = new MySQLStoreInstance(options);
 
-
-
 if (PORT === false) {
   console.error("Invalid port. Server not starting.");
   process.exit(1);
@@ -59,10 +56,10 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 // Import necessary modules and middlewares first
 
 // General middleware to handle JSON and URL-encoded data
-app.set('trust proxy', 1) 
+app.set("trust proxy", 1);
 
 app.use(cors(corsOptions)); // Ensure corsOptions includes credentials: true
-app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
+app.options("*", cors(corsOptions)); // Handle preflight requests for all routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Session configuration (should come before CORS and other middlewares)
@@ -78,18 +75,16 @@ app.use(
       secure: true,
       maxAge: 259200000, // 3 days in milliseconds
       httpOnly: true,
-      sameSite: "none", 
+      sameSite: "none",
     },
   })
 );
-app.use(cookieParser())
+app.use(cookieParser());
 
 // Routes and main logic (should come after all general middleware)
 app.use(router);
 // Error handling middleware (placed after routes)
 app.use(errorHandler);
-
-
 
 //Start server
 try {

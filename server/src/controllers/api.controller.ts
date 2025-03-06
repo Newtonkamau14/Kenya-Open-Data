@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import { ApiRepository } from "../repository/api.repository";
-import { ICounty } from "../models/county";
-import { AppError, logger, nanoid } from "../util/util";
+import { AppError } from "../util/util";
 
 export class ApiController {
   private static apiRepository = new ApiRepository();

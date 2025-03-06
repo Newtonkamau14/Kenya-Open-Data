@@ -1,4 +1,4 @@
-import { RowDataPacket } from "mysql2";
+import { type RowDataPacket } from "mysql2";
 
 export interface IUser extends RowDataPacket {
   id: string;
