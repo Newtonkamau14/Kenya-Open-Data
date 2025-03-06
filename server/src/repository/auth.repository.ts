@@ -93,4 +93,24 @@ export class AuthRepository {
       );
     });
   }
+  // changePassword(user:IUser):Promise<IUser | undefined>{
+  //   return new Promise((resolve,reject) =>{
+  //     const salt = crypto.randomBytes(16).toString("hex");
+  //     const hashedPassword = crypto
+  //       .pbkdf2Sync(user.password, salt, 1000, 64, "sha512")
+  //       .toString("hex");
+  //     connection.query<ResultSetHeader>(
+  //       `UPDATE users SET password = ?,salt = ? WHERE userId = ${userId}`,
+  //       [hashedPassword,salt],
+  //       (err,result) => {
+  //         if(err){
+  //           reject(err)
+  //         }
+  //         else {
+  //           resolve(result?.[0]);
+  //         }
+  //       }
+  //     )
+  //   })
+  // }
 }
