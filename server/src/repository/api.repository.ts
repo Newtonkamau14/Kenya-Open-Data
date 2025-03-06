@@ -1,7 +1,5 @@
-import { ResultSetHeader } from "mysql2";
 import { connection } from "../config/database";
 import { ICounty, IConstituency } from "../models/county";
-import { nanoid } from "../util/util";
 
 export class ApiRepository {
   getAllCounties(): Promise<ICounty[]> {
