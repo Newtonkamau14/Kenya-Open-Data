@@ -1,4 +1,4 @@
-import { createLogger, transports, format, info } from "winston";
+import { createLogger, transports, format } from "winston";
 import { customAlphabet } from "nanoid";
 
 /* Logs requests and db queries and it outputs to file called app.log */

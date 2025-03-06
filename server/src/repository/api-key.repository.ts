@@ -1,6 +1,4 @@
-import { ResultSetHeader } from "mysql2";
 import { connection } from "../config/database";
-import { request } from "express";
 import { IAPI } from "../models/api";
 import { generateAPIKey } from "../util/util";
 
