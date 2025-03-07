@@ -20,6 +20,7 @@ declare global {
       SESSION_SECRET: string;
       API_URL: string
       REACT_FRONTEND_URL: string
+      REDIS_URL: string
     }
   }
 }

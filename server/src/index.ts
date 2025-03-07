@@ -9,8 +9,10 @@ import cors from "cors";
 import * as session from "express-session";
 import MySQLStore, { type Options } from "express-mysql-session";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
+import { connectRedis } from "./config/redis";
 import router from "./routes/index";
 import { errorHandler } from "./middleware/middleware";
 import corsOptions from "./config/corsOptions";
@@ -54,12 +56,11 @@ const swaggerJsDocs = YAML.load(path.resolve(__dirname, "../api.yaml"));
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
 // Import necessary modules and middlewares first
-
+app.use(helmet()); // Secure Express apps by setting various HTTP headers
 // General middleware to handle JSON and URL-encoded data
 app.set("trust proxy", 1);
 
 app.use(cors(corsOptions)); // Ensure corsOptions includes credentials: true
-app.options("*", cors(corsOptions)); // Handle preflight requests for all routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Session configuration (should come before CORS and other middlewares)
@@ -88,6 +89,7 @@ app.use(errorHandler);
 
 //Start server
 try {
+  connectRedis();
   app.listen(PORT, () => {
     console.info(`Server is running at http://localhost:${PORT}`);
     connection.connect(function (err) {

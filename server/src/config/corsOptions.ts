@@ -1,5 +1,5 @@
-import { type CorsOptions } from 'cors';
-import allowedOrigins from './allowedOrigins';
+import { type CorsOptions } from "cors";
+import allowedOrigins from "./allowedOrigins";
 
 const corsOptions: CorsOptions = {
   origin: (
@@ -14,9 +14,10 @@ const corsOptions: CorsOptions = {
       callback(null, true);
     } else {
       // Origin is not allowed, deny access
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
+  allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
   credentials: true, // Allow credentials
   optionsSuccessStatus: 200, // For legacy browsers
