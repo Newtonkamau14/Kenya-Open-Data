@@ -7,43 +7,25 @@ import swaggerUI from "swagger-ui-express";
 import path from "path";
 import cors from "cors";
 import * as session from "express-session";
-import MySQLStore, { type Options } from "express-mysql-session";
 import cookieParser from "cookie-parser";
+import { RedisStore } from "connect-redis";
 import helmet from "helmet";
 import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
-import { connectRedis } from "./config/redis";
+import { connectRedis, redisClient } from "./config/redis";
 import router from "./routes/index";
 import { errorHandler } from "./middleware/middleware";
 import corsOptions from "./config/corsOptions";
+import { SESSION_AGE } from "./constants";
 
 const PORT = normalizePort(process.env.PORT || "3000");
 const app: Application = express();
-const MySQLStoreInstance = MySQLStore(session);
 
-const options: Options = {
-  host: process.env.DATABASE_HOST,
-  port: Number(process.env.DATABASE_PORT),
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  clearExpired: true,
-  checkExpirationInterval: 900000,
-  expiration: 86400000,
-  createDatabaseTable: true,
-  endConnectionOnClose: true,
-  charset: "utf8mb4_bin",
-  schema: {
-    tableName: "sessions",
-    columnNames: {
-      session_id: "session_id",
-      expires: "expires",
-      data: "data",
-    },
-  },
-};
-
-const sessionStore = new MySQLStoreInstance(options);
+const redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "session",
+  ttl: SESSION_AGE,
+});
 
 if (PORT === false) {
   console.error("Invalid port. Server not starting.");
@@ -70,11 +52,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: sessionStore,
+    store: redisStore,
     cookie: {
       path: "/",
       secure: true,
-      maxAge: 259200000, // 3 days in milliseconds
+      maxAge: SESSION_AGE, // 3 days in milliseconds
       httpOnly: true,
       sameSite: "none",
     },
