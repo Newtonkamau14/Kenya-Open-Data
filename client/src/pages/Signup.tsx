@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import visibility from "../assets/visibility.svg";
 import visibilityOff from "../assets/visibility_off.svg";
 import PageTitle from "../components/PageTitle";
+import DynamicSpinner from "../components/DynamicSpinner";
 
 function Signup() {
   const [email, setEmail] = useState<string>("");
@@ -161,9 +162,11 @@ function Signup() {
                 <button
                   disabled={isLoading}
                   type="submit"
-                  className="bg-[#357de8] text-white w-full font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-[#7298ee]"
+                  className={`bg-[#357de8] text-white w-full font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-[#7298ee]  ${
+                    isLoading ? "cursor-not-allowed opacity-50" : ""
+                  }`}
                 >
-                  Create an account
+                  {isLoading ? <DynamicSpinner /> : "Login"}
                 </button>
                 <p className="text-sm font-light">
                   Already have an account?{" "}
