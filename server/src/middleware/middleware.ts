@@ -7,6 +7,8 @@ import {
 import { MemoryStore, rateLimit } from "express-rate-limit";
 import { ApiKeyRepository } from "../repository/api-key.repository";
 
+const TELEMETRY_URL = process.env.TELEMETRY_URL;
+
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.session || !req.session.userId) {
     // User is not logged in
@@ -74,4 +76,32 @@ const limiter = rateLimit({
     res.status(options.statusCode).send(options.message),
 });
 
-export { requireAuth, authenticateKey, errorHandler, limiter };
+const collectAndSendTelemetry = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const start = Date.now();
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+
+    fetch(`${TELEMETRY_URL}/log`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        endpoint: req.path,
+        method: req.method,
+        response_time: duration,
+      }),
+    }).catch((err) => console.error("Telemetry failed", err));
+  });
+  next();
+};
+
+
+
+
+
+export { requireAuth, authenticateKey, errorHandler, limiter,collectAndSendTelemetry };
