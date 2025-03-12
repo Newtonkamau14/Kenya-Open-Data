@@ -14,7 +14,7 @@ import { normalizePort } from "./util/util";
 import { connection } from "./config/database";
 import { connectRedis, redisClient } from "./config/redis";
 import router from "./routes/index";
-import { errorHandler } from "./middleware/middleware";
+import { collectAndSendTelemetry, errorHandler } from "./middleware/middleware";
 import corsOptions from "./config/corsOptions";
 import { SESSION_AGE } from "./constants";
 
@@ -37,36 +37,45 @@ const swaggerJsDocs = YAML.load(path.resolve(__dirname, "../api.yaml"));
 // setup docs from our specification file and serve on the /docs route
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
-// Import necessary modules and middlewares first
+// 1️.Security middleware (always first)
 app.use(helmet()); // Secure Express apps by setting various HTTP headers
-// General middleware to handle JSON and URL-encoded data
-app.set("trust proxy", 1);
+app.set("trust proxy", 1); // Needed if running behind a reverse proxy like Nginx
 
-app.use(cors(corsOptions)); // Ensure corsOptions includes credentials: true
+// 2️.CORS (Should be before session, to allow cross-origin requests)
+app.use(cors(corsOptions));
+
+// 3️.Body Parsers (JSON, URL-encoded)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// Session configuration (should come before CORS and other middlewares)
+
+// 4.Cookie Parser (before session middleware)
+app.use(cookieParser());
+
+// 5️.Session middleware (after CORS and cookie parser)
 app.use(
   session.default({
     name: "kenya-open-data",
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     store: redisStore,
     cookie: {
       path: "/",
-      secure: true,
+      secure: true, // Set to false if in development (http)
       maxAge: SESSION_AGE, // 3 days in milliseconds
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "none", // Required for cross-origin cookies
     },
   })
 );
-app.use(cookieParser());
 
-// Routes and main logic (should come after all general middleware)
+// 6️.**Telemetry middleware (Should be BEFORE routes)**
+app.use(collectAndSendTelemetry);
+
+// 7️.Main Router (AFTER all setup middleware)
 app.use(router);
-// Error handling middleware (placed after routes)
+
+// 8️. **Error handling middleware (ALWAYS LAST)**
 app.use(errorHandler);
 
 //Start server

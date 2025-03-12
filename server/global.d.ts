@@ -18,9 +18,11 @@ declare global {
       DATABASE_NAME: string;
       DATABASE_PORT: number;
       SESSION_SECRET: string;
-      API_URL: string
-      REACT_FRONTEND_URL: string
-      REDIS_URL: string
+      API_URL: string;
+      REACT_FRONTEND_URL: string;
+      REDIS_URL: string;
+      TELEMETRY_URL: string;
+      TELEMETRY_SECRET: string;
     }
   }
 }
@@ -28,6 +30,6 @@ declare global {
 declare module "express-session" {
   interface SessionData {
     userId: string;
-    username: string
+    username: string;
   }
 }
