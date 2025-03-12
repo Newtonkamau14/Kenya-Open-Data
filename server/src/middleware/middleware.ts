@@ -5,9 +5,11 @@ import {
   type ErrorRequestHandler,
 } from "express";
 import { MemoryStore, rateLimit } from "express-rate-limit";
+import jwt from "jsonwebtoken";
 import { ApiKeyRepository } from "../repository/api-key.repository";
 
 const TELEMETRY_URL = process.env.TELEMETRY_URL;
+const TELEMETRY_SECRET = process.env.TELEMETRY_SECRET; 
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.session || !req.session.userId) {
@@ -85,10 +87,14 @@ const collectAndSendTelemetry = (
   res.on("finish", () => {
     const duration = Date.now() - start;
 
+    const token = jwt.sign({ service: "main-backend" }, TELEMETRY_SECRET, { expiresIn: "5m" });
+
+
     fetch(`${TELEMETRY_URL}/log`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify({
         endpoint: req.path,

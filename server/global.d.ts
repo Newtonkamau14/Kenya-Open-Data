@@ -22,6 +22,7 @@ declare global {
       REACT_FRONTEND_URL: string;
       REDIS_URL: string;
       TELEMETRY_URL: string;
+      TELEMETRY_SECRET: string;
     }
   }
 }
