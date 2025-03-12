@@ -1,7 +1,11 @@
-import express, { type Request, type Response } from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import express, { type Request, type Response,type NextFunction } from "express";
+import jwt, { type VerifyErrors } from "jsonwebtoken";
 import Database from "better-sqlite3";
 
-const db = new Database("telemetry.db");
+const TELEMETRY_SECRET = process.env.TELEMETRY_SECRET;
+const db = new Database(process.env.DATABASE_URL);
 const app = express();
 const PORT = 3001;
 
@@ -12,6 +16,53 @@ type TelemetryRecord = [string, string, number]; // Tuple type for records
 let telemetryQueue: TelemetryRecord[] = []; // Explicit type declaration
 
 app.use(express.json()); // Enable JSON body parsing
+
+const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    res.status(401).json({ message: "Unauthorized" });
+    return next();
+  }
+
+  const token = authHeader?.split(" ")[1];
+  if (!token) {
+     res.status(401).json({ message: "Unauthorized: No token provided" });
+     return next(); 
+  }
+
+  jwt.verify(
+    token as string,
+    TELEMETRY_SECRET,
+    (err: VerifyErrors | null, decoded?: object | string) => {
+      if (err) {
+        if (err.name === "JsonWebTokenError") {
+          res
+            .status(403)
+            .json({ message: "Forbidden: Invalid access token", err });
+            return next();
+        } else if (err.name === "TokenExpiredError") {
+           res
+            .status(401)
+            .json({ message: "Unauthorized: Access token expired", err });
+            return next();
+        } else {
+          // Handle other potential errors (e.g., signature verification failed)
+          console.error("Error verifying token:", err);
+          res
+            .status(500)
+            .json({ message: "Internal Server Error", err });
+            return next();
+        }
+      }
+
+      return next();
+    }
+  );
+};
 
 // Create table for telemetry
 db.exec(`
@@ -30,7 +81,7 @@ function flushTelemetryQueue(): void {
 
   const insertStmt = db.prepare(
     "INSERT INTO telemetry (endpoint, method, response_time) VALUES (?, ?, ?)"
-  ); 
+  );
 
   const insertMany = db.transaction((records: TelemetryRecord[]) => {
     for (const record of records) insertStmt.run(record);
@@ -43,11 +94,13 @@ function flushTelemetryQueue(): void {
 // Periodic flush (in case batch size is not reached)
 setInterval(flushTelemetryQueue, FLUSH_INTERVAL);
 
+app.use(authenticateToken)
+
 app.post("/log", (req: Request, res: Response) => {
   const { endpoint, method, response_time } = req.body;
 
   if (!endpoint || !method || response_time == null) {
-    res.status(400).json({ error: "Invalid data" });
+     res.status(400).json({ error: "Invalid data" });
   }
 
   telemetryQueue.push([endpoint, method, response_time]);
